@@ -1,0 +1,26 @@
+# Memory index
+
+- [User: Danial](user-danial.md) — SMT production engineer in Bangi; "Danial" = the person on the "Lourdes Gunadasan" account.
+
+- [Schedulle project](schedulle-project.md) — team check-in tracker: Node server + PyInstaller tray-agent exe with idle tracking.
+- [MCS / MCS Ai](mcs-material-control-system.md) — the new central material control system; why not "PCS", and where the "Ai" belongs.
+- [Sony SMT parts verification](sony-smt-parts-verification.md) — parts-exhaust interlock: 6 lines × 4 Sony F130/F209 mounters, 1 PC/line over serial, scanner-based reel check.
+- [Parts Control DB write access](parts-control-db-write-access.md) — only ACER-PC (dbo) can write ReelPart-New; dbsvc read-only, sa disabled; run via desktop BAT in ACER-PC's session.
+- [Remote access from home](remote-access-from-home.md) — Tailscale double-hop: home → line1pvs (100.108.0.118) → LAN → Parts Control PC (192.168.0.134).
+- [Parts DB server migration](parts-db-server-migration.md) — moving ReelPart-New off the shop-floor desktop to a real server; DB hardening (backups, audit cols, constraints, LineId) queued for then.
+- [Parts Control PC health](parts-control-pc-health.md) — 4GB Acer, C: was 0.1% free, ReelPart-New unbacked-up since 14 May 2026.
+- [Canon part invoices](canon-part-invoices.md) — OCR'd Mar–Jul invoices (RM 6.35M); prices are stable; the DB price master was fixed from them.
+- [Canon board costing](canon-board-costing.md) — per-model material cost from ProductBOM + the four traps that make a naive SUM wrong.
+- [PVS model naming](pvs-model-naming.md) — only Line 3 uses a "L3" variant; all other lines share the common un-suffixed model; amendments go into the common product.
+- [PVS shift + daily report](pvs-shift-and-daily-report.md) — auto shift-change at 07:35/19:35, per-shift status reset, downtime tracking, /report.html; DB date/shift format quirks (DPC yyyy-MM-dd/"Morning", ProductionLog dd-MM-yyyy).
+- [PVS Line 2 deploy](pvs-line2-deploy.md) — reaching LINE2PVS (Tailscale 100.94.102.44, line2pvs\Administrator) + the monitor-only pilot deploy (self-contained, no runtime install).
+- [PVS Line 5 deploy](pvs-line5-deploy.md) — LINE5PVS pilot (Tailscale 100.101.8.76, line5pvs\Administrator); A-side; COM cables to be swapped to Line-1 order later.
+- [PVS C1M machine counter](pvs-c1m-machine-counter.md) — reading the Sony completed-PWB counter over serial is rejected (A4E00) by M4; machine-side config, not our code; reader built + safe, waits on machine HMI.
+- [PVS count: two counters + cap](pvs-count-two-counters-and-cap.md) — never-reset serial report counter vs operator-reset panel count; trusting the wrong one inflated a lot; adoption now capped at target (Tier 1 live on all lines).
+- [Second brain vault](second-brain-vault.md) — Obsidian PARA vault at Documents/Dantec/DANOTTO; Claude does the Organize+Distill step.
+- [Claude transcript backups](claude-transcript-backups.md) — 2h scheduled export to Documents/Dantec/ClaudeBackups, after a zeroed index file hid a chat.
+- [Gmail→WhatsApp digest](gmail-whatsapp-digest.md) — 2-hourly Gmail summary sent to WhatsApp self-chat (60122185237); needs the local WhatsApp bridge running.
+
+- [PC health: known issues](pc-health-known-issues.md) — Dell Inspiron 7490; Dell ServiceShell RAM leak + a run of 3 BSODs to keep watching.
+- [Thunderbird nstmp disk bloat](thunderbird-nstmp-disk-bloat.md) — failed-compaction temp files silently ate 195GB of C:; will recur, check here first when disk is full.
+- [Windows startup mechanisms](windows-startup-mechanisms.md) — four places to check, not one; Store-app startup tasks are the one everyone misses.

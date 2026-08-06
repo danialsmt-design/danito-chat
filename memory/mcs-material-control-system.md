@@ -1,0 +1,91 @@
+---
+name: mcs-material-control-system
+description: MCS / MCS Ai — the new central material-control system replacing the vendor parts-control app; naming decision and rationale.
+metadata: 
+  node_type: memory
+  type: project
+  originSessionId: 45a3a5d4-9c33-4440-ac3d-328171bfb409
+  modified: 2026-07-31T15:49:04.201Z
+---
+
+**MCS = Material Control System** — the new central system for the parts/material side: reel
+inventory keyed by reel UID, goods-in, stock-out to lines, BOM, badge master, production count.
+The central counterpart to [[sony-smt-parts-verification]] (PVS = the line-side verification /
+interlock app). Danial named it on 2026-07-31.
+
+**Naming history — do not re-litigate:**
+- Danial first proposed **PCS (Parts Control System)**. I argued against it: in SMT, "PCS" already
+  means *pieces* (every reel label reads `3000 PCS`) and it collides with Process Control System.
+  Naming the quantity system "PCS" gives you "PCS shows 4000 PCS".
+- Settled on **MCS** because it is already the floor vocabulary — 192.168.0.134 has been called the
+  "material control PC" throughout the design — so it costs nothing to adopt.
+- Danial then asked for **"MCSAi"**, explicitly as a tribute to Claude / "the future of cyber
+  machines". I flagged one risk and proposed a split rather than refusing the name.
+
+**✅ CONFIRMED by Danial 2026-07-31: use the split below** ("the naming i will follow your
+sugestion"), and **MCS is a fresh build**, not a layer on the vendor app — data to be migrated off
+the Acer.
+
+**The split (confirmed):**
+- **MCS** = the system. Deterministic, auditable, boring on purpose.
+- **MCS Ai** = the intelligence layer only (the Phase 9 work: learned per-feeder consumption rates,
+  learned board rates per model, anomaly detection, Mode D drift patterns).
+
+**Why:** Danial's own hard rule is that *the interlock stays deterministic and never learns —
+right part or stop*; learning belongs in prediction/warning only, never the safety decision. A
+whole-system "Ai" name invites a customer/Canon auditor to ask "so the AI decides if the part is
+correct?" and oversells it. The split keeps the safety path honestly non-AI while putting the name
+where real intelligence exists. **If Danial reaffirms MCSAi for the whole system, use it
+throughout without further comment** — his factory, his call.
+
+**💰 COMMERCIAL MODEL = BUY-SELL / TURNKEY (Danial, 2026-07-31 — FINAL, supersedes two wrong readings
+of mine).** **Canon invoices GMS for every component SENT (60-day terms); GMS invoices Canon for the
+finished boards (60-day terms).** So it is NOT consignment and NOT pay-on-consumption — **GMS OWNS the
+inventory from the moment Canon ships it**: GMS's stock, GMS's balance sheet, GMS's cash. (I said
+first "loss is Canon's material, not yours", then "pay-on-consumption / report is the billing
+trigger". Both WRONG. Do not repeat either.)
+Consequences:
+1. **Component loss is PURE MARGIN LOSS** — material GMS already paid for that never became a
+   sellable board. No allowance to sit inside, nobody to bill it to.
+2. **WORKING CAPITAL:** 60 days both ways, so every day material sits in the store is a day of GMS
+   cash tied up. ⇒ **over-requesting is borrowing, not just clutter** (I initially called
+   over-requesting merely inconvenient — wrong).
+3. **GMS's BALANCE-SHEET inventory figure traces back to those twice-monthly counts** — MCS improves
+   the accuracy of a number in the financial statements. Different, more senior audience.
+⇒ **The ledger must carry VALUE, not just quantity.** Loss reported in currency and per feeder;
+actual-vs-standard material cost per model (standard from `ProductBOM` — see [[canon-board-costing]] —
+the gap IS the loss); continuous inventory valuation; and **reel AGEING** from `StockIns.Date` (dead
+stock = GMS cash frozen; a report they almost certainly do not have today).
+
+**📉 TWO INDEPENDENT BUSINESS CASES (use both with GMS):**
+1. **Downtime** — the physical count is **2 h × twice a month, ALL 6 LINES STOPPED, whole floor
+   counting** = **48 h/yr of full-factory stoppage = 288 line-hours**. At ~53 machine cycles/h × 4
+   boards/panel (L307) ≈ **210 boards/line-hour** ⇒ order of **60,000 boards/yr**. MCS can honestly
+   claim 24 counts/yr → 1–2, and **no line stoppage** (store-only, cycle-counted while running using
+   the `PartRanks` A/B/C that already exist). Manual counting never reaches zero — it becomes the
+   monthly reconciliation ANCHOR that proves the ledger.
+2. **The cash leak** — unmeasured component loss on billed-back material. Probably the bigger number.
+
+**🏗️ ARCHITECTURE BOUNDARY (Danial, 2026-07-31 — explicit):** **PVS owns everything that touches a
+machine** (serial, Sony protocol, R0/R2/C1M/**C1Z**, verification/interlock; one instance per line).
+**MCS never talks to a machine** — it consumes what PVS publishes, keeps the ledger, produces the
+views. **PVS must persist an append-only consumption log and MCS pulls INCREMENTALLY BY CURSOR**, so a
+line-PC outage backfills instead of losing production. See [[pvs-c1m-machine-counter]].
+
+**📋 MCS v1 = READ-ONLY ANALYTICS (Danial's choice).** Writes nothing to `ReelPart-New`. Ledger types:
+Received (`StockIns`) · Issued (`StockOuts`) · **Consumed** (measured Line 1 / backflushed lines 2–6)
+· Returned · Adjusted (`ReelAdjustments`) · Scrapped · CountVerified. **Every row carries PROVENANCE**
+(machine-measured / inferred / backflushed / human-keyed) — with pay-on-consumption billing that
+provenance field IS the audit trail when Canon queries a number. **Hosted on `LINE1PVS`** (7.4 GB RAM,
+182 GB free, always on, DB over Tailscale, proven self-contained .NET 8 deploy) — **explicitly
+temporary** until the server in [[parts-db-server-migration]] exists.
+**🎯 DEADLINE + PROOF: next physical count is MID-AUGUST 2026 (~14 Aug).** MCS v1's first deliverable
+is NOT a dashboard — it is a **variance report**: MCS's computed balance vs what the count finds. The
+honest scope for that date is Line 1 only (the measured line). NOT achievable by then: C1Z on all 24
+machines, or measured consumption on lines 2–6 (needs PVS rolled out).
+
+**Open, and more consequential than the name:** is MCS a *replacement* for the vendor ASP.NET app
+(`ProductionAPI` + `ReelPart-New`) on the Acer, or a *new layer beside it*? This drives the DB work
+already queued in [[parts-db-server-migration]]. Given the Acer's state ([[parts-control-pc-health]]
+— 4GB, C: at 0.1% free, 10 weeks with no backup), "replace" looks like the honest answer.
+Related: [[parts-control-db-write-access]].
