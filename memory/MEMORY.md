@@ -5,12 +5,14 @@
 - [Schedulle project](schedulle-project.md) — team check-in tracker: Node server + PyInstaller tray-agent exe with idle tracking.
 - [MCS / MCS Ai](mcs-material-control-system.md) — the new central material control system; why not "PCS", and where the "Ai" belongs.
 - [Sony SMT parts verification](sony-smt-parts-verification.md) — parts-exhaust interlock: 6 lines × 4 Sony F130/F209 mounters, 1 PC/line over serial, scanner-based reel check.
-- [Parts Control DB write access](parts-control-db-write-access.md) — only ACER-PC (dbo) can write ReelPart-New; dbsvc read-only, sa disabled; run via desktop BAT in ACER-PC's session.
+- [Parts Control DB write access](parts-control-db-write-access.md) — dbsvc CAN write data remotely (no DDL, so back up to CSV not a table); ACER-PC (dbo) only for grants.
+- [Reading true stock](reading-true-stock.md) — StockIns.RemainingQty is zeroed on issue; store-only stock reads zero for parts on the feeders.
 - [Remote access from home](remote-access-from-home.md) — Tailscale double-hop: home → line1pvs (100.108.0.118) → LAN → Parts Control PC (192.168.0.134).
 - [Parts DB server migration](parts-db-server-migration.md) — moving ReelPart-New off the shop-floor desktop to a real server; DB hardening (backups, audit cols, constraints, LineId) queued for then.
 - [Parts Control PC health](parts-control-pc-health.md) — 4GB Acer, C: was 0.1% free, ReelPart-New unbacked-up since 14 May 2026.
 - [Canon part invoices](canon-part-invoices.md) — OCR'd Mar–Jul invoices (RM 6.35M); prices are stable; the DB price master was fixed from them.
 - [Canon board costing](canon-board-costing.md) — per-model material cost from ProductBOM + the four traps that make a naive SUM wrong.
+- [Canon BOM source of truth](canon-bom-source-of-truth.md) — ProductBOM.Quantity lies (L254 said 31, truth 1); read the MSPC PDFs instead, password = model number.
 - [PVS model naming](pvs-model-naming.md) — only Line 3 uses a "L3" variant; all other lines share the common un-suffixed model; amendments go into the common product.
 - [PVS shift + daily report](pvs-shift-and-daily-report.md) — auto shift-change at 07:35/19:35, per-shift status reset, downtime tracking, /report.html; DB date/shift format quirks (DPC yyyy-MM-dd/"Morning", ProductionLog dd-MM-yyyy).
 - [PVS Line 2 deploy](pvs-line2-deploy.md) — reaching LINE2PVS (Tailscale 100.94.102.44, line2pvs\Administrator) + the monitor-only pilot deploy (self-contained, no runtime install).

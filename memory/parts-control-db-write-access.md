@@ -1,14 +1,21 @@
 ---
 name: parts-control-db-write-access
-description: "How to write to the ReelPart-New DB — only ACER-PC (dbo) can; dbsvc is read-only, sa disabled."
+description: "How to write to the ReelPart-New DB — dbsvc CAN write data remotely (db_datawriter, no DDL); ACER-PC (dbo) needed only for grants/DDL."
 metadata: 
   node_type: memory
   type: reference
   originSessionId: 19fcfab6-cf20-4ed1-99bb-c8d8f04306be
-  modified: 2026-07-31T07:47:51.060Z
+  modified: 2026-08-07T12:30:39.760Z
 ---
 
 **Update 2026-07-31 (verified live):** the DB instance is `DESKTOP-TECHNIC\SQLEXPRESS` and it **listens on TCP 1433** (Tailscale `100.91.120.113,1433`) — that's the same instance as `.\SQLEXPRESS`, not a separate default instance. PVS connects with the SQL login **`pvs_ro`** (userId in `line.config.json` → `central`), which is **read-only**. My `partsctl.cred` WinRM session runs as **`DESKTOP-TECHNIC\dbsvc`**, which is `db_datawriter` (confirmed: a rolled-back test INSERT into DailyProductionCount succeeded) **but `is_sa=0` and canNOT `GRANT`** (tried `GRANT INSERT … TO pvs_ro` as dbsvc → "Cannot find the object … or you do not have permission"). So dbsvc can write data itself but cannot hand write rights to pvs_ro. **To grant pvs_ro a permission you need a db_owner/sysadmin at the PC** — put a BAT on the Parts Control PC and have the DBA run it. Did exactly this for the DPC writer: `deploy/grant-pvs-write.bat` → `GRANT INSERT ON dbo.DailyProductionCount TO pvs_ro` (dropped to `C:\Users\Public\Desktop\`, run by the DBA). **After the grant, PVS is now the Line 1 DailyProductionCount writer** (operator app stopped writing L1; `writeProductionCount:true`, 5-min buckets per lot/side). See [[pvs-shift-and-daily-report]].
+
+**Update 2026-08-07 (verified live, during the L254 BOM correction):** `dbsvc` is `db_datawriter` +
+`db_datareader` but **NOT `db_ddladmin`** — so `SELECT * INTO <backup_table>` fails with *"CREATE TABLE
+permission denied"*. **Back up to a CSV FILE instead of a backup table**: `sqlcmd -s "," -h -1` through the
+WinRM session, written to `Documents\Dantec\MCS\backups\`. Verify the row count and that the target rows
+appear in it *before* the UPDATE. Also: **`ProductBOM.TotalPrice` is derived (`Quantity * UnitPrice`)** —
+updating `Quantity` alone silently corrupts costing, so always set both in the same statement.
 
 Writing to the **ReelPart-New** DB on the Parts Control PC (192.168.0.134, `DESKTOP-TECHNIC\SQLEXPRESS`):
 
