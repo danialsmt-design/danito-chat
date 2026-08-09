@@ -4,6 +4,7 @@
 
 - [Schedulle project](schedulle-project.md) — team check-in tracker: Node server + PyInstaller tray-agent exe with idle tracking.
 - [NFC HID reader protocol](nfc-hid-reader-protocol.md) — VID_FFFF/PID_0035 demo NFC writer: full reversed protocol; buzzer/detect work, no UID; standalone scanner at Downloads/nfc-scanner.
+- [RFID app (PN532 tool)](rfid-app-pn532-tool.md) — dump/crack/write/clone web app for the PN532 (COM4); test card is gen2 magic; UHF reader integration pending.
 - [MCS / MCS Ai](mcs-material-control-system.md) — the new central material control system; why not "PCS", and where the "Ai" belongs.
 - [Sony SMT parts verification](sony-smt-parts-verification.md) — parts-exhaust interlock: 6 lines × 4 Sony F130/F209 mounters, 1 PC/line over serial, scanner-based reel check.
 - [Parts Control DB write access](parts-control-db-write-access.md) — dbsvc CAN write data remotely (no DDL, so back up to CSV not a table); ACER-PC (dbo) only for grants.
