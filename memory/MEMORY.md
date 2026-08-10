@@ -19,6 +19,7 @@
 - [PVS shift + daily report](pvs-shift-and-daily-report.md) — auto shift-change at 07:35/19:35, per-shift status reset, downtime tracking, /report.html; DB date/shift format quirks (DPC yyyy-MM-dd/"Morning", ProductionLog dd-MM-yyyy).
 - [PVS Line 2 deploy](pvs-line2-deploy.md) — reaching LINE2PVS (Tailscale 100.94.102.44, line2pvs\Administrator) + the monitor-only pilot deploy (self-contained, no runtime install).
 - [PVS Line 5 deploy](pvs-line5-deploy.md) — LINE5PVS pilot (Tailscale 100.101.8.76, line5pvs\Administrator); A-side; COM cables to be swapped to Line-1 order later.
+- [PVS connection guardian](pvs-connection-guardian.md) — netguard: resident self-healing watchdog on each line PC; fixed the Line 5 static-Wi-Fi (no gateway) outage that blocked operator-ID scanning.
 - [PVS C1M machine counter](pvs-c1m-machine-counter.md) — reading the Sony completed-PWB counter over serial is rejected (A4E00) by M4; machine-side config, not our code; reader built + safe, waits on machine HMI.
 - [PVS count: two counters + cap](pvs-count-two-counters-and-cap.md) — never-reset serial report counter vs operator-reset panel count; trusting the wrong one inflated a lot; adoption now capped at target (Tier 1 live on all lines).
 - [PVS substitute parts](pvs-substitute-parts.md) — a slash in a BOM/feeder part number = substitute; PartsMatch is exact-only so it false-rejects valid substitutes; fix pending exact-format confirmation.
