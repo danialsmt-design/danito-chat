@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 19fcfab6-cf20-4ed1-99bb-c8d8f04306be
-  modified: 2026-08-11T04:15:53.873Z
+  modified: 2026-08-11T07:41:51.635Z
 ---
 
 Danial's firm policy (2026-08-11): **the lot lifecycle is supervisor-controlled only.** PVS must NOT:
@@ -13,7 +13,9 @@ Danial's firm policy (2026-08-11): **the lot lifecycle is supervisor-controlled 
 - **auto-end** a lot (not on a machine model change, not on reaching target),
 - **auto-write** production-count rows under a lot it picked itself.
 
-Only a **supervisor (L2+ badge)** may: **select/change the lot**, **end the lot** (force-end), and **set/force the production count**. PVS's only automatic job is to **count boards against the supervisor's lot** (and hold that count through a machine reset — see [[pvs-count-two-counters-and-cap]]).
+Only a **supervisor (L2+ badge)** may: **select/change the lot**, **end the lot** (force-end), and **set/force the production count**. PVS's automatic jobs are: **count boards against the supervisor's lot** (holding that count through a machine reset — see [[pvs-count-two-counters-and-cap]]) and **manage stock-out quantities** (`syncStockOuts` — reel consumption; this stays ON, it's PVS's job).
+
+**Config levers (immediate mitigation 2026-08-11):** `writeProductionCount` turned OFF on Line 1 to stop the phantom "PVS (auto)" DailyProductionCount writes; `syncStockOuts` left ON (stock-out qty is PVS-managed). The flag is all-or-nothing, so the proper code fix is to **re-enable count writing but gate it to a supervisor-set lot** (so a supervisor force-set still records, but PVS never auto-writes an auto-detected lot).
 
 **Why:** the L307 incident (Line 1, 2026-08-11) — DailyProductionCount showed lot HC20790530000/L307 written every 5 min stamped `SenderIp='PVS'`, `OperatorName='PVS (auto)'`, while the supervisor was actually running L313/HC20789511000 (which had ZERO rows). PVS's auto-lot-follow + writeProductionCount=ON had bound and written a stale lot with no supervisor action. The running lot never got recorded.
 

@@ -5,10 +5,12 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 19fcfab6-cf20-4ed1-99bb-c8d8f04306be
-  modified: 2026-08-10T09:13:45.253Z
+  modified: 2026-08-11T08:08:23.877Z
 ---
 
-Setting up a **Synology DS225+** to host the parts DB (ReelPart-New) in a SQL Server 2022 Docker container, retiring the shop-floor 4GB Acer. This is the [[parts-db-server-migration]] finally happening.
+Setting up a **Synology DS225+** as the host for **MCS / MCS Ai** — the new central material control system ([[mcs-material-control-system]]) — in Docker. (Original framing was just migrating ReelPart-New off the 4GB Acer per [[parts-db-server-migration]]; user clarified 2026-08-11 the NAS is really to run MCS, which will need its own DB + app containers. ReelPart-New migration may fold into that or run alongside.) SQL Server 2022 in Docker is still the DB engine.
+
+**Still RAM-blocked as of 2026-08-11** ("waiting ram") — NAS at ~1.7GB, needs the D4NS01-4G (→6GB). Nothing (SQL Server, MCS) can start until it's installed. Docker/Container Manager ready, `/volume1/docker/reelpart-sql/{data,log,backup}` staged, SSH access via Line 5 jump host works.
 
 **State as of 2026-08-10 (all done except the container):**
 - NAS on the plant LAN at **192.168.0.169** (DHCP; the intended static **192.168.0.170** did NOT apply in the wizard — set it before cutover). DSM **7.4.1**.
