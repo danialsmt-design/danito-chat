@@ -22,10 +22,14 @@
 - [PVS Line 5 deploy](pvs-line5-deploy.md) — LINE5PVS pilot (Tailscale 100.101.8.76, line5pvs\Administrator); A-side; COM cables to be swapped to Line-1 order later.
 - [PVS connection guardian](pvs-connection-guardian.md) — netguard: resident self-healing watchdog on each line PC; fixed the Line 5 static-Wi-Fi (no gateway) outage that blocked operator-ID scanning.
 - [PVS C1M machine counter](pvs-c1m-machine-counter.md) — reading the Sony completed-PWB counter over serial is rejected (A4E00) by M4; machine-side config, not our code; reader built + safe, waits on machine HMI.
+- [PVS feeder source = ProductBOM](pvs-feeder-source-productbom.md) — feeders from ONE fresh DB source (ProductBOM), never a stale local cache (the Line 2 F109-vs-F125 bug); total feeder parts must match Canon BOM regardless of machines/cells run.
 - [PVS lot = supervisor only](pvs-lot-supervisor-only.md) — lot change/end + set-count are supervisor-badge ONLY; PVS never auto-follows/auto-ends/auto-writes a lot (the "PVS (auto)" L307 incident).
 - [PVS count reconcile timing](pvs-count-reconcile-timing.md) — ~40s board cycle; sample/reconcile the machine count right after a board-complete (in the gap), not on a blind timer, to avoid losing count.
 - [PVS count: two counters + cap](pvs-count-two-counters-and-cap.md) — never-reset serial report counter vs operator-reset panel count; trusting the wrong one inflated a lot; adoption now capped at target (Tier 1 live on all lines).
 - [PVS substitute parts](pvs-substitute-parts.md) — a slash in a BOM/feeder part number = substitute; PartsMatch is exact-only so it false-rejects valid substitutes; fix pending exact-format confirmation.
+- [PVS manual feeder load](pvs-manual-feeder-load.md) — supervisor loads per-machine pen-drive feeder CSVs (Sony+JUKI) on breakdown; all rows go to the chosen machine; loaded total must = Canon BOM.
+- [PVS deploy when line idle](pvs-deploy-when-line-idle.md) — detect a stopped line by board-rate=0 (not the online flag; Sony A4E00-answers when parked); deploy-when-idle.ps1 watcher + line IPs.
+- [PVS bare-board pack capture](pvs-bare-board-pack-capture.md) — planned: scan pack labels (lot#+unique ID) at input, lot-match + dedupe + reconcile to lot size; waiting on a sample label (2026-08-12).
 - [Second brain vault](second-brain-vault.md) — Obsidian PARA vault at Documents/Dantec/DANOTTO; Claude does the Organize+Distill step.
 - [Claude transcript backups](claude-transcript-backups.md) — 2h scheduled export to Documents/Dantec/ClaudeBackups, after a zeroed index file hid a chat.
 - [Gmail→WhatsApp digest](gmail-whatsapp-digest.md) — 2-hourly Gmail summary sent to WhatsApp self-chat (60122185237); needs the local WhatsApp bridge running.
