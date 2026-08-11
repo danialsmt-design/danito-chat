@@ -22,6 +22,8 @@
 - [PVS Line 5 deploy](pvs-line5-deploy.md) — LINE5PVS pilot (Tailscale 100.101.8.76, line5pvs\Administrator); A-side; COM cables to be swapped to Line-1 order later.
 - [PVS connection guardian](pvs-connection-guardian.md) — netguard: resident self-healing watchdog on each line PC; fixed the Line 5 static-Wi-Fi (no gateway) outage that blocked operator-ID scanning.
 - [PVS C1M machine counter](pvs-c1m-machine-counter.md) — reading the Sony completed-PWB counter over serial is rejected (A4E00) by M4; machine-side config, not our code; reader built + safe, waits on machine HMI.
+- [PVS lot = supervisor only](pvs-lot-supervisor-only.md) — lot change/end + set-count are supervisor-badge ONLY; PVS never auto-follows/auto-ends/auto-writes a lot (the "PVS (auto)" L307 incident).
+- [PVS count reconcile timing](pvs-count-reconcile-timing.md) — ~40s board cycle; sample/reconcile the machine count right after a board-complete (in the gap), not on a blind timer, to avoid losing count.
 - [PVS count: two counters + cap](pvs-count-two-counters-and-cap.md) — never-reset serial report counter vs operator-reset panel count; trusting the wrong one inflated a lot; adoption now capped at target (Tier 1 live on all lines).
 - [PVS substitute parts](pvs-substitute-parts.md) — a slash in a BOM/feeder part number = substitute; PartsMatch is exact-only so it false-rejects valid substitutes; fix pending exact-format confirmation.
 - [Second brain vault](second-brain-vault.md) — Obsidian PARA vault at Documents/Dantec/DANOTTO; Claude does the Organize+Distill step.

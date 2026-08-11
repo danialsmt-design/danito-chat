@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 19fcfab6-cf20-4ed1-99bb-c8d8f04306be
-  modified: 2026-08-06T00:46:21.977Z
+  modified: 2026-08-11T03:51:16.775Z
 ---
 
 **The gotcha:** a Sony mounter exposes TWO different production counters, and PVS was trusting the wrong one.
@@ -18,5 +18,7 @@ metadata:
 **The fix (Tier 1, deployed to all 3 lines 2026-08-06, commit 28a22e9):** `AdoptLotCount` now **refuses** to adopt a machine count beyond the lot target (+10% slack), refuses when the target is unknown (DB-down window) instead of falling open, and audits every adopt/reject/force-end/seed as VerificationRecords. `/api/lot/adopt` is now supervisor-badge-gated. `LotProgress` exposes `overTarget`.
 
 **Operator agreement:** Line 1 operators will reset the report counter at each lot change going forward. **Why it matters:** even with that habit, the cap is the backstop for a missed/late reset.
+
+**Reset guard — added 2026-08-11 (built, NOT yet deployed):** `AdoptLotCount` now also refuses an auto-adopt (enforceCap) when the machine value is **below** PVS's current lot count (`wentBackwards = machinePanels < oldPanels`) — a tech resetting the machine program/count mid-lot would otherwise drag the lot count to ~0. PVS's own R0 tally (`_m4PanelsTotal++`, never reset) is trusted; the count is held and continues to lot end. Only a supervisor force (enforceCap=false) may set it down. So both directions are now guarded: too-high (un-reset report counter) AND too-low (mid-lot reset). Confirmed by the Sony SI-F/SI-E manuals: the protocol has **no set/preset-count command** — only read (C1M), read-and-clear (mmm 910/920/900), or delete-all (C5CM) — so the host holding the count is the only option. Deploy to Sony lines 1/2/4/5 (Core+LineApp together, idle window) still pending, alongside the [[pvs-substitute-parts]] matcher and the standby/short-for-lot card fix.
 
 **Next (not yet built):** Tier 2 = delta-based adoption — baseline the report counter at lot start (persist `pcBaseline` in lot-progress.json), trust only its *increment*. That removes the false "operators reset the report" assumption entirely. Part of the robustness roadmap (integrity → accuracy → traceability); see also the inventory audit finding that C1Z per-feeder pickup counts are the unused ground-truth for consumption.
