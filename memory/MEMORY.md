@@ -10,6 +10,7 @@
 - [Parts Control DB write access](parts-control-db-write-access.md) — dbsvc CAN write data remotely (no DDL, so back up to CSV not a table); ACER-PC (dbo) only for grants.
 - [Reading true stock](reading-true-stock.md) — StockIns.RemainingQty is zeroed on issue; store-only stock reads zero for parts on the feeders.
 - [Remote access from home](remote-access-from-home.md) — Tailscale double-hop: home → line1pvs (100.108.0.118) → LAN → Parts Control PC (192.168.0.134).
+- [NAS ReelPart DB host](nas-reelpart-db-host.md) — Synology DS225+ to host ReelPart-New (SQL Server in Docker); staged, blocked on the 6GB RAM upgrade until 2026-08-11.
 - [Parts DB server migration](parts-db-server-migration.md) — moving ReelPart-New off the shop-floor desktop to a real server; DB hardening (backups, audit cols, constraints, LineId) queued for then.
 - [Parts Control PC health](parts-control-pc-health.md) — 4GB Acer, C: was 0.1% free, ReelPart-New unbacked-up since 14 May 2026.
 - [Canon part invoices](canon-part-invoices.md) — OCR'd Mar–Jul invoices (RM 6.35M); prices are stable; the DB price master was fixed from them.
