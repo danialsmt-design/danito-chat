@@ -30,6 +30,7 @@
 - [PVS manual feeder load](pvs-manual-feeder-load.md) — supervisor loads per-machine pen-drive feeder CSVs (Sony+JUKI) on breakdown; all rows go to the chosen machine; loaded total must = Canon BOM.
 - [PVS deploy when line idle](pvs-deploy-when-line-idle.md) — detect a stopped line by board-rate=0 (not the online flag; Sony A4E00-answers when parked); deploy-when-idle.ps1 watcher + line IPs.
 - [PVS bare-board pack capture](pvs-bare-board-pack-capture.md) — planned: scan pack labels (lot#+unique ID) at input, lot-match + dedupe + reconcile to lot size; waiting on a sample label (2026-08-12).
+- [PVS machine skip rule](pvs-machine-skip-rule.md) — skip is supervisor-only, never auto-skip on silent serial; skipped machine excluded from program alarm/verify; all lines 4 machines, all serial except Line 3 JUKI (M1); Line 3 ports M2=COM3/M3=COM6/M4=COM4.
 - [Second brain vault](second-brain-vault.md) — Obsidian PARA vault at Documents/Dantec/DANOTTO; Claude does the Organize+Distill step.
 - [Claude transcript backups](claude-transcript-backups.md) — 2h scheduled export to Documents/Dantec/ClaudeBackups, after a zeroed index file hid a chat.
 - [Gmail→WhatsApp digest](gmail-whatsapp-digest.md) — 2-hourly Gmail summary sent to WhatsApp self-chat (60122185237); needs the local WhatsApp bridge running.
