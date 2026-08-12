@@ -32,6 +32,7 @@
 - [PVS bare-board pack capture](pvs-bare-board-pack-capture.md) — planned: scan pack labels (lot#+unique ID) at input, lot-match + dedupe + reconcile to lot size; waiting on a sample label (2026-08-12).
 - [PVS machine skip rule](pvs-machine-skip-rule.md) — skip is supervisor-only, never auto-skip on silent serial; skipped machine excluded from program alarm/verify; all lines 4 machines, all serial except Line 3 JUKI (M1); Line 3 ports M2=COM3/M3=COM6/M4=COM4.
 - [PVS reel retire (rank rule)](pvs-reel-retire-rank-rule.md) — PartRanks A/B/C; auto-retire spent remnant on mid-lot reel swap (A=0/B<30/C<200): record ConsumedReels then zero StockOut; reversible; inert until table exists; rest → manual list to Ashish.
+- [PVS rules "bible"](pvs-rules-bible.md) — the PVS Operating Rules (docs/pvs-rules.md + Artifact) are the governing authority; follow until Danial issues a new version; distributed to Raja Rao/Kalsom/Danish.
 - [Second brain vault](second-brain-vault.md) — Obsidian PARA vault at Documents/Dantec/DANOTTO; Claude does the Organize+Distill step.
 - [Claude transcript backups](claude-transcript-backups.md) — 2h scheduled export to Documents/Dantec/ClaudeBackups, after a zeroed index file hid a chat.
 - [Gmail→WhatsApp digest](gmail-whatsapp-digest.md) — 2-hourly Gmail summary sent to WhatsApp self-chat (60122185237); needs the local WhatsApp bridge running.
