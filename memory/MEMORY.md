@@ -6,6 +6,7 @@
 - [NFC HID reader protocol](nfc-hid-reader-protocol.md) — VID_FFFF/PID_0035 demo NFC writer: full reversed protocol; buzzer/detect work, no UID; standalone scanner at Downloads/nfc-scanner.
 - [RFID app (PN532 tool)](rfid-app-pn532-tool.md) — dump/crack/write/clone web app for the PN532 (COM4); test card is gen2 magic; UHF reader integration pending.
 - [MCS / MCS Ai](mcs-material-control-system.md) — the new central material control system; why not "PCS", and where the "Ai" belongs.
+- [PVS ⇄ MCS Ai coordination](pvs-mcs-coordination.md) — the two sessions share one DB; ownership map + single-writer rule + the shared ledger (Documents/Dantec/MCS/COORDINATION.md) that stops them contradicting.
 - [Sony SMT parts verification](sony-smt-parts-verification.md) — parts-exhaust interlock: 6 lines × 4 Sony F130/F209 mounters, 1 PC/line over serial, scanner-based reel check.
 - [Parts Control DB write access](parts-control-db-write-access.md) — dbsvc CAN write data remotely (no DDL, so back up to CSV not a table); ACER-PC (dbo) only for grants.
 - [Reading true stock](reading-true-stock.md) — StockIns.RemainingQty is zeroed on issue; store-only stock reads zero for parts on the feeders.
@@ -35,6 +36,7 @@
 - [PVS reel retire (rank rule)](pvs-reel-retire-rank-rule.md) — PartRanks A/B/C; auto-retire spent remnant on mid-lot reel swap (A=0/B<30/C<200): record ConsumedReels then zero StockOut; reversible; inert until table exists; rest → manual list to Ashish.
 - [PVS rules "bible"](pvs-rules-bible.md) — the PVS Operating Rules (docs/pvs-rules.md + Artifact) are the governing authority; follow until Danial issues a new version; distributed to Raja Rao/Kalsom/Danish.
 - [StockOut stale reconciliation](stockout-stale-reconciliation.md) — StockOuts holds huge stale stock from completed lots; till-June B/C zero-out done 2026-08-12 (3,016 reels/17.77M pcs); restore from MCS/zero-till-june-BC_BACKUP.csv.
+- [MCS Ai agent spec](mcs-ai-agent-spec.md) — 24/7 headless Claude on the NAS (6GB now); token-prudent, approval-gated writes; job #1 = line-app + DB connection guardian; NOT built yet (build in MCS Ai session).
 - [Second brain vault](second-brain-vault.md) — Obsidian PARA vault at Documents/Dantec/DANOTTO; Claude does the Organize+Distill step.
 - [Claude transcript backups](claude-transcript-backups.md) — 2h scheduled export to Documents/Dantec/ClaudeBackups, after a zeroed index file hid a chat.
 - [Gmail→WhatsApp digest](gmail-whatsapp-digest.md) — 2-hourly Gmail summary sent to WhatsApp self-chat (60122185237); needs the local WhatsApp bridge running.

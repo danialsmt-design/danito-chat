@@ -109,5 +109,22 @@ printer config / current template), and design the **reel-UID scheme** (today's 
 profiling 2026-08-13): `StockIns.RemainingQty` is zeroed on issue (don't use for balance); dates are
 **nvarchar `dd-MM-yyyy`**; value via `PartPrices.UnitPrice` by `PartNumber`; ~8084 reels in / 7575 out.
 Store-count **variance report = received − issued + returns ± adjustments** (store-only count → no
-machine-consumption needed for that report). **Currently PAUSED — Danial said "wait" before any build.**
-See [[mcs-cutover-readiness]], [[nas-reelpart-db-host]].
+machine-consumption needed for that report).
+**🎨 UI DIRECTION APPROVED 2026-08-13:** clean/industrial, self-contained HTML/CSS/JS (no framework —
+right weight for the NAS + factory box), cool-neutral palette + single teal accent, mono/tabular figures
+for UIDs·qty·price, uppercase labels; live ZD230 label preview (50×25 mm) with a rendered barcode. The
+**stock-in mockup is the reference design** (artifact `claude.ai/code/artifact/c0b74804-e2dc-4377-9042-6b13440124c3`;
+source in this session's scratchpad `mcs-stock-in.html`). Danial confirmed the style fits the shop floor.
+Proposed reel-UID scheme in the mockup: **`RP-YYMMDD-####`** (prefix + date + daily running seq) — cleaner
+than today's part-derived `355123-H123%`; still to be ratified. Stock-in fields shown: part (scan/autocomplete
+from validated master → auto maker/price/rank/in-stock), order#, qty, auto UID, auto received-time; primary
+action "Mint UID · Print label · Save". Charts/Reports page will use the `dataviz` skill later.
+**📐 MCS DATA/BUSINESS RULES (ratified by Danial 2026-08-13):**
+- **MCS extends the EXISTING `ReelPart-New`** (26 base tables, on the NAS) — NOT a new DB. "Build the MCS DB" = extend + harden it.
+- **Returns → reactivate the ORIGINAL reel** (same `PartUID`, restore remaining qty to store, mark not-consumed). ⇒ **UID is minted ONCE at first stock-in and never regenerated** — one stable UID per physical reel for life.
+- **"True stock" = STORE + ON-LINE** = reels in store (received/returned, not issued) + reels on feeders (`InLineInv`) − waste/adjustments. Reconciles vs the current whole-floor physical count.
+- **UID scheme RATIFIED = `RP-YYMMDD-####`** (Danial 2026-08-13; prefix + mint-date + zero-padded daily running seq). Minted once at first stock-in. Legacy reels keep their `Counters`-derived UIDs (`355123-H123%`); both coexist (PartUID is a string) — no renumbering.
+- **Key schema facts:** `InLineInv`(Line,PartUID,Qty)=on-feeder reels; `Parts`(PartNumber,Maker,Quantity,Available bit,IDCounter); `PartRanks`(PartNumber PK,Rank char); `Users`(UserID,AccessLevel,UserName,Password **plaintext nchar(10)**,UserUID badge); `PartPrices`(PartNumber,UnitPrice).
+- **Hardening gaps found (fix as MCS writes):** NO foreign keys anywhere; **`StockIns` and `Parts` have NO primary key**; plaintext passwords. These let the bad data in (typos, dup BOM rows).
+
+**Still design/spec phase — no backend built yet.** See [[mcs-cutover-readiness]], [[nas-reelpart-db-host]].
