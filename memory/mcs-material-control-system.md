@@ -89,3 +89,25 @@ machines, or measured consumption on lines 2–6 (needs PVS rolled out).
 already queued in [[parts-db-server-migration]]. Given the Acer's state ([[parts-control-pc-health]]
 — 4GB, C: at 0.1% free, 10 weeks with no backup), "replace" looks like the honest answer.
 Related: [[parts-control-db-write-access]].
+
+**🚀 SCOPE EXPANDED 2026-08-13 — MCS = the FULL operational system, not just read-only analytics
+(supersedes the "v1 = read-only" line above).** Danial wants MCS to own the whole reel lifecycle:
+**new-parts registration → mint reel UID → print label → stock-in → stock-out**, PLUS the analytics.
+So MCS **replaces the WinForms `PartsControlSystem_App`** and becomes a *writer* to `ReelPart-New`
+(fold in the DB hardening from [[parts-db-server-migration]] — audit cols, unique constraints,
+part-number validation — at that point). Maps to tables: registration→`Parts`(+`PartPrices`),
+stock-in→`StockIns`, stock-out→`StockOuts`, UID = per-reel `PartUID`.
+**Architecture (confirmed):** self-contained **.NET 8 web app hosted ON THE NAS** (same proven
+pattern as PVS), reading/writing `ReelPart-New` on the NAS. Operators use a browser on the
+**"MCS terminal" = the existing Parts PC `.134` (DESKTOP-TECHNIC)** — which transitions from DB-host
+to a thin client (browser + printer + scanner) once the DB is on the NAS.
+**Label printing:** Zebra **ZD230 (203 dpi, ZPL), USB** on `.134` → **Zebra BrowserPrint** (small free
+local service) so the web page sends ZPL over `localhost` to the USB printer. Barcode **scanner = HID
+keyboard**, no integration. TODO before building: exact **label stock size** (read off `.134`'s
+printer config / current template), and design the **reel-UID scheme** (today's UIDs look like
+`355123-H123%` = part-derived; needs a robust unique scheme). Data quirks to respect (from NAS-copy
+profiling 2026-08-13): `StockIns.RemainingQty` is zeroed on issue (don't use for balance); dates are
+**nvarchar `dd-MM-yyyy`**; value via `PartPrices.UnitPrice` by `PartNumber`; ~8084 reels in / 7575 out.
+Store-count **variance report = received − issued + returns ± adjustments** (store-only count → no
+machine-consumption needed for that report). **Currently PAUSED — Danial said "wait" before any build.**
+See [[mcs-cutover-readiness]], [[nas-reelpart-db-host]].
