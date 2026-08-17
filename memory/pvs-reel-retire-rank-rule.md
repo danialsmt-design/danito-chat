@@ -5,14 +5,14 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 19fcfab6-cf20-4ed1-99bb-c8d8f04306be
-  modified: 2026-08-12T07:40:40.921Z
+  modified: 2026-08-17T15:07:18.071Z
 ---
 
 **Rank source:** `PartRanks` table in ReelPart-New — columns `PartNumber (varchar)`, `Rank (char)`. 155 parts: A=22, B=40, C=93. (Not in code/BOM/StockIns — it's this table.) Read via `IReelPartRepository.GetPartRankAsync`.
 
-**Retire thresholds** (retire a reel when its remaining is below): **A → only 0 · B → < 30 · C → < 200.** Un-ranked parts are left alone.
+**⚠ CHANGED 2026-08-17 — the rank threshold was REMOVED as the retire gate.** Danial's governing model (see [[pvs-spare-vs-loaded]] and the [[pvs-rules-bible]]): **StockOut = reels in feeders + standby reels at the line; a CONSUMED reel leaves StockOut for `ConsumedReels`.** A **parts-change swap = the machine ran that feeder OUT = the outgoing reel is consumed (empty)** — the drift-prone tracked remaining doesn't matter. So the retire now fires **UNCONDITIONALLY** on a parts-change swap, for **any rank, any remaining**. The old thresholds (A:0 / B:<30 / C:<200) both stranded drift-inflated empties (→ StockOut bloat) and over-retired usable partials — that's why they're gone.
 
-**Auto trigger (built 2026-08-12, PVS):** when an operator swaps a reel OFF a feeder **during a running lot** (Mode-B parts change), PVS checks the OUTGOING reel's rank + remaining; if below threshold it **records it in `ConsumedReels`, then zeroes its `StockOuts.Quantity`** (via `UpdateReelQtyAsync` — the same write `SyncStockOuts` uses; zeroing is free). Records BEFORE zeroing, so if `ConsumedReels` doesn't exist the insert throws and nothing is zeroed → feature is INERT until the table exists. Gated to `SyncStockOuts=true` lines. Hook is in `SessionCoordinator.ScanReel` (capture outgoing before `_reels.Set`, retire after `MaybeFinalizeAsync`).
+**Auto trigger (built 2026-08-12, gate removed 2026-08-17):** when an operator swaps a reel OFF a feeder during a running lot (Mode-B parts change), PVS **records the OUTGOING reel in `ConsumedReels`, then zeroes its `StockOuts.Quantity`** (via `UpdateReelQtyAsync`). Records BEFORE zeroing, so if `ConsumedReels` doesn't exist the insert throws and nothing is zeroed → INERT until the table exists. Gated to `SyncStockOuts=true` lines. Hook is `RetireOutgoingReelAsync` in `SessionCoordinator.ScanReel` (capture outgoing before `_reels.Set`, retire after `MaybeFinalizeAsync`). `RetireThreshold` method deleted. Rank is still read but only stamped on the ConsumedReel for the restore record. **Deployed to all 5 lines 2026-08-17** (L2/3/5 WinRM, L1/4 SMB+RPC since their WinRM is down).
 
 **Reversible:** `POST /api/reel/restore {uid, badge}` → `RestoreConsumedReelAsync` (L2+): restores the StockOut qty to `RemainingAtRetire` and sets `ConsumedReels.Restored=1`.
 
