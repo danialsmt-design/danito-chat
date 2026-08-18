@@ -1,29 +1,26 @@
 ---
 name: pvs-downtime-capture
-description: "PVS downtime capture — auto per-cell parts-exhaust recovery + operator reason pop-up by line. BUILT 2026-08-18, tests pass, NOT deployed (deploy 2026-08-19)."
+description: "PVS downtime capture — auto per-cell parts-exhaust recovery + operator reason pop-up by line; shift/break/coverage model; built 2026-08-18, NOT deployed."
 metadata:
   node_type: memory
   type: project
   originSessionId: 19fcfab6-cf20-4ed1-99bb-c8d8f04306be
-  modified: 2026-08-18T09:08:41.166Z
+  modified: 2026-08-18T10:14:33.276Z
 ---
 
-**BUILT 2026-08-18 in the PVS source, NOT yet deployed (Danial: deploy tomorrow / 2026-08-19).** Builds clean, all 365 Core tests pass (12 new).
+**Downtime capture feature — BUILT in source 2026-08-18, tests pass (365), NOT deployed (Danial: "code but wait deployment till tomorrow").** Two halves:
 
-**Two halves (design settled with Danial over this session):**
-1. **AUTOMATIC per-cell parts-exhaust recovery** — every parts-out is timed to that CELL producing again; per-cell tally = # exhausts + recovery time (total/avg/worst). No operator action (PVS sees parts-out + board-complete on the wire).
-2. **MANUAL operator reason stops BY LINE** — pop-up on verify.html with 5 buttons: **Machine problem / Waiting part / No air / Rest time / Scheduled stop.** Recording **starts ONLY when the operator taps a reason** (clock from the tap, not the detected stop); **ends when the line produces again**, or at **shift end** if the line never runs again. Re-tapping a different reason re-classifies. Report tallies total time **under each title**.
+1. **AUTOMATIC per-cell parts-exhaust recovery** (`Pvs.Core/Runtime/CellRecoveryLog.cs`): every parts-out → clock to that cell producing again; per-cell rollup = exhaust count + recovery time (total/avg/worst), tagged with the part# (`SessionCoordinator.ExpectedPartAt`). No operator action — PVS already sees parts-out + board-complete on the wire.
+2. **MANUAL reason stops BY LINE** (`Pvs.Core/Runtime/ReasonStopLog.cs`): buttons **machine / waiting_part / no_air / rest / scheduled**. Recording starts ONLY on the operator tap (not the detected stop); ends when the line produces again, or at shift end if it never does. Re-tap re-classifies.
 
-**Files:**
-- `Pvs.Core/Runtime/ReasonStopLog.cs` + `CellRecoveryLog.cs` (pure, unit-tested; `tests/Pvs.Core.Tests/StopCaptureTests.cs`).
-- `Pvs.LineApp/Runtime/StopTrackingService.cs` — subscribes each channel's `PartsOutDetected` + `BoardCompleted`, persists `stops.json` (per-day, restart-safe, resets at day boundary), closes open stop at shift rollover. Part tag via new `SessionCoordinator.ExpectedPartAt(m,f)`.
-- Wired in `LineService` (property `StopTracking`, start + dispose). Config `LineConfig.StopDetectSeconds` (default 90 = ~2 missed cycles; the "stopped producing" prompt threshold).
-- Endpoints: `GET /api/stop/state` (open reason + elapsed, `stopped`/`producing` flags, open cell recoveries), `POST /api/stop/reason {reason}`. `/api/report/daily` gains `stopCapture` (byReason + byCell + stops + recoveries).
-- `verify.html`: `#stopPop` overlay (5 bilingual EN/MY buttons), `#dtChip` recording chip (⏺ reason · mm:ss) + `#dtBtn` "Line stop" in the Controls card. Auto-prompts when `stopped && !dismissed && no check-overlay`; clock still starts on tap. Verified in a static preview (chip formats, pop-up renders, no JS errors).
+**Wiring:** `Pvs.LineApp/Runtime/StopTrackingService.cs` (subscribes each channel's PartsOutDetected + BoardCompleted, persists `stops.json` per day, closes open stops on shift rollover). Endpoints `GET /api/stop/state`, `POST /api/stop/reason {reason}`; daily report gains `stopCapture` (byReason tallies + per-cell recovery). verify.html: reason pop-up `#stopPop` + recording chip `#dtChip` + "⏱ Line stop" button; auto-prompts when `stopped` (no board for `StopDetectSeconds`, default 90) and no check overlay is up. Config knob `LineConfig.StopDetectSeconds`.
 
-**NOT in this build (still to do / discuss):**
-- **Break windows** — Danial will feed break times; then a down span in a break tags **Break** + is excluded from downtime, and **break-aware recovery** subtracts overlapping break minutes from a cell's parts-exhaust recovery. See [[pvs-shift-and-daily-report]] downtime + [[pvs-board-flow]].
-- **"Waiting boards from Line X"** reason (cross-line magazine starvation) — depends on the board-input tracking ([[pvs-board-flow]] / [[pvs-bare-board-pack-capture]]), the next build chunk.
-- `report.html` UI sections for the new rollups (API is live; page not yet updated).
+**Board-input count = FIRST machine (Line 3 = M2), NOT M4.** M4 = output/lot count. See [[pvs-board-flow]].
 
-Connects: [[pvs-shift-and-daily-report]], [[pvs-board-flow]], [[pvs-partsout-expected-watchdog]], [[pvs-system-brain]].
+**SHIFT / BREAK / STAFFING MODEL (Danial, 2026-08-18) — governs how breaks affect downtime:**
+- **Day shift 07:30–19:30 is the normal run. NIGHT shift (19:30–07:30) is ON-DEMAND only** — high demand or breakdown recovery. Not a fixed daily shift; don't hardcode fixed night breaks.
+- **Lunch is STAGGERED, two 45-min slots: 12:00–12:45 and 12:45–13:30.** Afternoon break 15:30–15:45.
+- **Operators cover for each other** — when behind schedule, one operator covers **2 lines** while the other breaks, so **a line often keeps RUNNING through lunch.** A break window is therefore NOT guaranteed planned-downtime.
+- **CONSEQUENCE for downtime:** trust the PRODUCTION SIGNAL (board-completes = line running), not the clock. Line producing through a break = covered, no downtime (automatic). Break windows are only a HINT: a stop inside a break slot defaults the suggested reason to **Rest time** (operator confirms/changes). **No auto-exclusion, no silent break subtraction** — idle-during-break is COUNTED and tagged Rest time (visible under its own title; net it out in a report view if wanted). `BreakWindows.cs` pure helper exists for the hint.
+
+Connects: [[pvs-board-flow]], [[pvs-partsout-expected-watchdog]], [[pvs-system-brain]], [[pvs-shift-and-daily-report]], [[pvs-rules-bible]].
