@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 19fcfab6-cf20-4ed1-99bb-c8d8f04306be
-  modified: 2026-08-18T15:23:15.264Z
+  modified: 2026-08-18T15:24:42.192Z
 ---
 
 **A Canon board is double-sided → it runs the SMT line TWICE, one pass per side.** (Taught 2026-08-18.)
@@ -20,8 +20,9 @@ metadata:
 - Header: `GLOBAL MANUFACTURING SOLUTION · Production Identification Slip`; **MAG number boxed** top-right beside a large **QR**.
 - Fields: **PO** (e.g. HC20782775000), **SIDE = A / B** (NEW — the side is now on the magazine itself), **MODEL** (e.g. L309), **PO QTY** (e.g. 300), **CUST** = `Canon Opto (M) Sdn Bhd · LINE n` (replaces the old `LINE (5-A)-(1-B)-FCT` route string), **DATE + "N PCS / mag"** (NEW explicit per-magazine board count, e.g. **30 PCS/mag**), + AOI VI / QC sign-off (REMARKS dropped).
 - **Per-magazine qty is explicit on the slip** (e.g. 30/mag → PO 300 = 10 magazines) — so second-side reconciliation reads 30/mag off the slip, no StockOuts lookup for magazines.
-- **QR content CONFIRMED (MCS deployed 2026-08-18):** `PO: <po> | QTY: <total> | MAG: <n>/<total-mags> | DATE: <dd/MM/yyyy>` — e.g. `PO: HC20792053000 | QTY: 1800 | MAG: 3/10 | DATE: 18/08/2026`. **MAG n/total is the unique per-magazine key** (dedupe on it; `total` = magazines expected for the lot). PO + QTY kept in their original positions so an existing parser still reads them; DATE disambiguates reprints/days. **Per-mag boards = QTY / total-mags** (1800/10 = 180; matches the printed "N PCS/mag").
-- **PVS second-side parse/reconcile:** PO → match running lot; MAG `n/total` → dedupe by n + know the expected count (`total`); each magazine = QTY/total boards; accumulate scanned mags toward QTY; DATE guards reprints. Count-only, no interlock (same as bare-board packs).
+- **QR content CONFIRMED (MCS deployed 2026-08-18):** `PO: <po> | QTY: <total> | MAG: <n>/<total-mags> | DATE: <dd/MM/yyyy>` — e.g. `PO: HC20792053000 | QTY: 1800 | MAG: 3/10 | DATE: 18/08/2026`. **MAG n/total is the unique per-magazine key** (dedupe on it; `total` = magazines expected for the lot). PO + QTY (total) kept in their original positions so an existing parser still reads them; DATE disambiguates reprints/days.
+- **⚠ Per-magazine board count is NOT QTY/total.** It is a value the **supervisor or store PIC INPUTS per magazine** (magazines can hold different amounts — a partial/remainder magazine is normal). The printed "N PCS/mag" on the slip is that input. So PVS must use the ENTERED per-mag qty, not a computed split. Source of that number for PVS: TBD — MCS/DB lookup by PO+MAG#, or operator keys it at the second-side scan (confirm with Danial).
+- **PVS second-side parse/reconcile:** scan QR → PO (match running lot) + MAG `n/total` (dedupe by n, expected count = total) + DATE (guard reprints); per-magazine boards = the supervisor/store-PIC input; accumulate scanned mags toward the lot. Count-only, no interlock (same as bare-board packs).
 - Old (PO-Monitor) format was: CUSTOMER `CANON · LINE (5-A)-(1-B)-FCT`, PO QTY 1200, per-slip QUANTITY 400, QR not-unique-per-mag, REMARKS present.
 
 **The slip ROUTE encodes the line pairing.** e.g. `LINE (5-A) - (1-B) - FCT` = **Line 5 A-side FIRST → Line 1 B-side SECOND → FCT** (function test). Confirmed for **L307: Line 5 (A/first) → Line 1 (B/second) → FCT**.
