@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 19fcfab6-cf20-4ed1-99bb-c8d8f04306be
-  modified: 2026-08-11T15:32:46.227Z
+  modified: 2026-08-18T08:49:24.485Z
 ---
 
 Planned PVS feature (design agreed, NOT built — waiting on a sample label from Danial, promised 2026-08-12).
@@ -26,6 +26,6 @@ operator scans **6 unique IDs** (6 × 50 = 300).
 - Pack qty ("50") is NOT on the label — decide source: fixed/config standard, per-model, or work in pack COUNT =
   lot size ÷ standard pack size. Plus remainder packs (lot 280 → 5×50 + 1×30): are short packs normal?
 - Exact barcode layout of lot# vs unique ID (need a real scanned string to parse them apart).
-- On-scan action: hard-block the line until the full board count is staged, or just warn/reconcile.
+- ~~On-scan action: hard-block or warn?~~ **RESOLVED 2026-08-18: COUNT-ONLY, NO INTERLOCK at this stage.** The scan just keeps the input count matched to the lot (lot-match + dedupe + accumulate qty); the line never stops for it. Trigger = manual OR by board count (soft reminder when the staged buffer runs low, line keeps running). Operator may scan multiple labels at once, qty adds to the lot.
 
-Ties into "first process" (A-side = bare boards in from supplier packs); B-side handling deferred.
+**SUPERSEDED/EXTENDED by [[pvs-board-flow]] (2026-08-18):** "first process = A-side" is WRONG — which side is first is production-decided & sticky, not the A/B label. Pack barcode = part#+UID (qty from StockOuts), same as a reel. Second-side (B) handling is now defined: the second-side line scans **magazine slips** (QR = PO+MAG#, qty from the slip), NOT store packs. Input consumption counted at the FIRST machine (Line 3 = M2). See [[pvs-board-flow]].
