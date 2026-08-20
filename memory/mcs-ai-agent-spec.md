@@ -1,12 +1,14 @@
 ---
 name: mcs-ai-agent-spec
-description: "Spec for the 24/7 MCS Ai agent (headless Claude on the NAS) — Danial's defining requirements. NOT built yet."
+description: "Spec for the 24/7 agent (headless Claude on the NAS) — SUPERSEDED 2026-08-19: the agent became Floor Ai, its own workstream. Kept for the requirements detail."
 metadata: 
   node_type: memory
   type: project
   originSessionId: 19fcfab6-cf20-4ed1-99bb-c8d8f04306be
-  modified: 2026-08-14T12:46:34.046Z
+  modified: 2026-08-19T15:21:12.128Z
 ---
+
+⛔ **SUPERSEDED 2026-08-19 — this agent is now [[floor-ai-manager-agent]]**, its own workstream/session/folder (`Documents/Dantec/FloorAi`), NOT the MCS Ai session. Both responsibilities below (connection guardian, stock-accuracy guardian) moved there and became Floor Ai Phases 1 and 2; MCS Ai is now purely DB/schema + entry pages. The requirements, guardrails and reach detail below are still accurate and Floor Ai inherits them — only the *owner* changed. Where this and Floor Ai's brief disagree, **Floor Ai wins**.
 
 The **MCS Ai agent** = a 24/7 headless Claude (Claude Agent SDK) running on the **NAS** (now unblocked: 6GB RAM as of ~2026-08-14, reachable via LAN 192.168.0.169, SSH user GLOBALSMT, DSM up). This is the "keep you alive when the laptop is off" goal. **Status: NOT built** — it's a real deployment project (Synology Docker container + Agent SDK + custom tools + service). Build it in the spun-off **"MCS Ai / NAS setup"** session, methodically. Danial has provided an Anthropic API key + credit (key must live on the NAS as an env var, NEVER in chat — the pasted ones are exposed, rotate before go-live) — see [[mcs-material-control-system]], [[nas-reelpart-db-host]].
 

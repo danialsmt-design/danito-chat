@@ -48,7 +48,8 @@
 - [PVS rules "bible"](pvs-rules-bible.md) — the PVS Operating Rules (docs/pvs-rules.md + Artifact) are the governing authority; follow until Danial issues a new version; distributed to Raja Rao/Kalsom/Danish.
 - [PVS DPC recording flag](pvs-dpc-recording-flag.md) — writeProductionCount per-line flag; a redeploy reset it and L1/L3/L4 recorded nothing for days; all 5 fixed + templates fixed; syncStockOuts is the same landmine.
 - [StockOut stale reconciliation](stockout-stale-reconciliation.md) — StockOuts holds huge stale stock from completed lots; till-June B/C zero-out done 2026-08-12 (3,016 reels/17.77M pcs); restore from MCS/zero-till-june-BC_BACKUP.csv.
-- [MCS Ai agent spec](mcs-ai-agent-spec.md) — 24/7 headless Claude on the NAS (6GB now); token-prudent, approval-gated writes; job #1 = line-app + DB connection guardian; NOT built yet (build in MCS Ai session).
+- [Floor Ai manager agent](floor-ai-manager-agent.md) — the 24/7 shop-floor manager; 3rd workstream/session (Dantec/FloorAi), read-only by design, inherited both guardian jobs.
+- [MCS Ai agent spec](mcs-ai-agent-spec.md) — SUPERSEDED by Floor Ai; kept for the requirements/guardrails detail it still supplies.
 - [Second brain vault](second-brain-vault.md) — Obsidian PARA vault at Documents/Dantec/DANOTTO; Claude does the Organize+Distill step.
 - [Claude transcript backups](claude-transcript-backups.md) — 2h scheduled export to Documents/Dantec/ClaudeBackups, after a zeroed index file hid a chat.
 - [Gmail→WhatsApp digest](gmail-whatsapp-digest.md) — 2-hourly Gmail summary sent to WhatsApp self-chat (60122185237); needs the local WhatsApp bridge running.
