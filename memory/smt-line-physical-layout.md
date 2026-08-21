@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: reference
   originSessionId: 0705d0b6-4b14-4d7a-b2fe-0b8c0a03a2bb
-  modified: 2026-08-20T13:08:35.291Z
+  modified: 2026-08-21T02:07:05.666Z
 ---
 
 Source: Danial's "5 LINES SMT LAYOUT (RIGHT TO LEFT FLOW)" drawing + Sony manual `MAN00000743_SI-F_OPT.pdf` (SI-G/SI-F Communication System, 182pp, at `Downloads/comm sony/`), both supplied 2026-08-20.
@@ -41,6 +41,8 @@ Board enters at station 1 (far right) and exits at 13 (far left). Numbering runs
 ## Sony supply-station numbering — AUTHORITATIVE (manual p.95)
 
 > Supply station number: `1xx` = **cassette**; `5xx`, `6xx` = **tray**
+
+**The older SI-E series spec differs** (`MAN00000188_SI-E2000_OPT.pdf` p.73): `1xx`, **`2xx`** = cassette; `5xx`, `6xx` = tray. So the E-series has a **2xx cassette range that the SI-F spec omits** — allow for it in any range-based rule rather than treating 2xx as unknown.
 
 So the number itself encodes the feeder type, and the front/rear split follows it. This **confirms** the guess in `SupplyPosition.cs` that `[F]116 (F)` is a front tape cassette and `[F]501 (R)` is a rear tray — it is a **rule, not a coincidence**. Note **`6xx` is also tray** and PVS has likely never seen one.
 

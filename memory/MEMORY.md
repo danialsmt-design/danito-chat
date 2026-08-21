@@ -55,6 +55,7 @@
 - [Claude transcript backups](claude-transcript-backups.md) — 2h scheduled export to Documents/Dantec/ClaudeBackups, after a zeroed index file hid a chat.
 - [Gmail→WhatsApp digest](gmail-whatsapp-digest.md) — 2-hourly Gmail summary sent to WhatsApp self-chat (60122185237); needs the local WhatsApp bridge running.
 - [Bursa trading agent](bursa-trading-agent.md) — 0.469% round-trip cost floor killed every intraday backtest; buy-and-hold beat all variants; Bursa data-licensing traps.
+- [PVS unload + rule trees](pvs-unload-and-rule-trees.md) — "Unload all feeders" (clear feeders, keep UID remainder, never touch StockOut/lot/attrition, reversible) + the rule-tree/guardian workflow + verify.html declutter; all deployed to 5 lines.
 
 - [PC health: known issues](pc-health-known-issues.md) — Dell Inspiron 7490; Dell ServiceShell RAM leak + a run of 3 BSODs to keep watching.
 - [Thunderbird nstmp disk bloat](thunderbird-nstmp-disk-bloat.md) — failed-compaction temp files silently ate 195GB of C:; will recur, check here first when disk is full.
