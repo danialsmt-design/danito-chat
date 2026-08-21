@@ -7,7 +7,8 @@
 - [RFID app (PN532 tool)](rfid-app-pn532-tool.md) — dump/crack/write/clone web app for the PN532 (COM4); test card is gen2 magic; UHF reader integration pending.
 - [MCS / MCS Ai](mcs-material-control-system.md) — the new central material control system; why not "PCS", and where the "Ai" belongs.
 - [PVS ⇄ MCS Ai coordination](pvs-mcs-coordination.md) — the two sessions share one DB; ownership map + single-writer rule + the shared ledger (Documents/Dantec/MCS/COORDINATION.md) that stops them contradicting.
-- [Sony SMT parts verification](sony-smt-parts-verification.md) — parts-exhaust interlock: 6 lines × 4 Sony F130/F209 mounters, 1 PC/line over serial, scanner-based reel check.
+- [Sony SMT parts verification](sony-smt-parts-verification.md) — parts-exhaust interlock: 5 lines (6th planned) × 4 mounters, 1 PC/line over serial, scanner-based reel check.
+- [SMT line physical layout](smt-line-physical-layout.md) — the 13-station line (right-to-left), M1/M2=F130 + M3/M4=F209, and the Sony rule 1xx=cassette / 5xx-6xx=tray.
 - [Parts Control DB write access](parts-control-db-write-access.md) — dbsvc CAN write data remotely (no DDL, so back up to CSV not a table); ACER-PC (dbo) only for grants.
 - [Reading true stock](reading-true-stock.md) — StockIns.RemainingQty is zeroed on issue; store-only stock reads zero for parts on the feeders.
 - [Remote access from home](remote-access-from-home.md) — Tailscale double-hop: home → line1pvs (100.108.0.118) → LAN → Parts Control PC (192.168.0.134).

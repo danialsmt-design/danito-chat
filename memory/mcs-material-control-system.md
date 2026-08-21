@@ -58,7 +58,7 @@ the gap IS the loss); continuous inventory valuation; and **reel AGEING** from `
 stock = GMS cash frozen; a report they almost certainly do not have today).
 
 **📉 TWO INDEPENDENT BUSINESS CASES (use both with GMS):**
-1. **Downtime** — the physical count is **2 h × twice a month, ALL 6 LINES STOPPED, whole floor
+1. **Downtime** — the physical count is **2 h × twice a month, ALL LINES STOPPED, whole floor
    counting** = **48 h/yr of full-factory stoppage = 288 line-hours**. At ~53 machine cycles/h × 4
    boards/panel (L307) ≈ **210 boards/line-hour** ⇒ order of **60,000 boards/yr**. MCS can honestly
    claim 24 counts/yr → 1–2, and **no line stoppage** (store-only, cycle-counted while running using
