@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 5b02837f-661a-4d9b-95be-190fb8781262
-  modified: 2026-08-09T21:17:15.590Z
+  modified: 2026-08-23T14:26:12.736Z
 ---
 
 Standalone RFID tool at `C:\Users\Lourdes Gunadasan\Downloads\chatgpt-ruflo\exports\rfid-app` (Node/TypeScript, ChatGPT-generated then heavily extended). Run: `npm run rfid`, open **http://127.0.0.1:4173/dump.html**. Server = `src/rfid/server.js` on port 4173.
@@ -16,4 +16,4 @@ Standalone RFID tool at `C:\Users\Lourdes Gunadasan\Downloads\chatgpt-ruflo\expo
 Endpoints: `/api/pn532/{dump,write,clone,clone-card,deepcrack,read-block,read-all}`. Key files: `pn532-reader.ts`, `server.ts`, `domain.ts`, `public/dump.html`.
 libnfc crack tools live in `C:\Users\Lourdes Gunadasan\Desktop\NfcKing\nfc-bin` (mfcuk works, mfoc broken); libnfc.conf connstring = pn532_uart:COM4:115200.
 
-**PENDING (next session): integrate a UHF RFID reader/writer** Danial ordered (Pinduoduo, ~RM105, ISO18000-6C/EPC Gen2, 902–928MHz, USB HID virtual-keyboard, 2dBi built-in = short range, same S-logo vendor family as the demo NFC reader). Plan: add a UHF reader to the app's reader-registry + a UHF read-EPC/write-EPC/clone section. Reverse its HID protocol like the NFC reader (proxy usb.dll shim) if HID-keyboard mode isn't enough. UID equivalent = EPC (rewritable on standard tags); TID is factory-locked (need "magic" changeable-TID tags for a full clone). Malaysia UHF band 919–923 MHz.
+**UHF reader — INTEGRATED (2026-08-23).** MagicRF M100/MT6 chip, VID_FFFF/PID_0035 over the generalHID transport (NOT keyboard mode). Driver = `uhf.py` in the app root (proven: `python uhf.py read` → `{"ok":true,"epc":...}`, `write <epc>` reads back). Protocol: inner frame `BB <type> <cmd> <PL16BE> <params> <sum&0xFF> 7E`, wrapped in the AA/xor/BB HID frame, report id 0x01 out / 0x03 in, 256-byte feature reports. read=cmd 0x22, write=0x49 (MUST Set-Select 0x0C to current EPC first or write is rejected). Server shells out via `runUhf()` → routes `POST /api/uhf/read` and `POST /api/uhf/write`. UI: "UHF (915 MHz) tag — EPC" panel at top of dump.html — Read EPC / Use as write value / Write EPC; clone = read source EPC → use as write value → swap tag → write. UID equivalent = EPC (rewritable); TID factory-locked (need changeable-TID magic tags for a true full clone). Malaysia UHF band 919–923 MHz.
