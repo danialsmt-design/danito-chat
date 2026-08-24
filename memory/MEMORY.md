@@ -60,3 +60,5 @@
 - [PC health: known issues](pc-health-known-issues.md) — Dell Inspiron 7490; Dell ServiceShell RAM leak + a run of 3 BSODs to keep watching.
 - [Thunderbird nstmp disk bloat](thunderbird-nstmp-disk-bloat.md) — failed-compaction temp files silently ate 195GB of C:; will recur, check here first when disk is full.
 - [Windows startup mechanisms](windows-startup-mechanisms.md) — four places to check, not one; Store-app startup tasks are the one everyone misses.
+- [Harness date UTC offset](harness-date-utc-offset.md) — Claude's "today" is UTC; early-morning MYT reads a day behind the real PC clock — trust the machine, not the harness date.
+- [Line PC time sync](line-pc-time-sync.md) — all 5 line PCs now auto-sync via internet NTP; L2-L5 were not syncing (service stopped/free-running) before 2026-08-24.
