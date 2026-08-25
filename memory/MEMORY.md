@@ -54,6 +54,8 @@
 - [Second brain vault](second-brain-vault.md) — Obsidian PARA vault at Documents/Dantec/DANOTTO; Claude does the Organize+Distill step.
 - [Claude transcript backups](claude-transcript-backups.md) — 2h scheduled export to Documents/Dantec/ClaudeBackups, after a zeroed index file hid a chat.
 - [Gmail→WhatsApp digest](gmail-whatsapp-digest.md) — 2-hourly Gmail summary sent to WhatsApp self-chat (60122185237); needs the local WhatsApp bridge running.
+- [WhatsApp bridge (gms-wabridge Pi)](whatsapp-bridge-pi.md) — the ONE WhatsApp channel: Pi on Tailscale 100.90.248.92, REST :8080 + SSE :8081 live; send path repointed to it; laptop duplicate bridge removed/archived 2026-08-24, MCP reads broken by design.
+- [WhatsApp: route via gms-wabridge](whatsapp-route-via-wabridge.md) — standing rule: every message Danial asks to be sent goes out through the Pi bridge, never the dead laptop path.
 - [Bursa trading agent](bursa-trading-agent.md) — 0.469% round-trip cost floor killed every intraday backtest; buy-and-hold beat all variants; Bursa data-licensing traps.
 - [PVS unload + rule trees](pvs-unload-and-rule-trees.md) — "Unload all feeders" (clear feeders, keep UID remainder, never touch StockOut/lot/attrition, reversible) + the rule-tree/guardian workflow + verify.html declutter; all deployed to 5 lines.
 
@@ -62,3 +64,4 @@
 - [Windows startup mechanisms](windows-startup-mechanisms.md) — four places to check, not one; Store-app startup tasks are the one everyone misses.
 - [Harness date UTC offset](harness-date-utc-offset.md) — Claude's "today" is UTC; early-morning MYT reads a day behind the real PC clock — trust the machine, not the harness date.
 - [Line PC time sync](line-pc-time-sync.md) — all 5 line PCs now auto-sync via internet NTP; L2-L5 were not syncing (service stopped/free-running) before 2026-08-24.
+- [PVS DB fail-safe](pvs-db-failsafe.md) — fail-over second DB link (Tailscale) + hold-and-write + WhatsApp alert when neither DB route is reachable; all 5 lines, 2026-08-24.
