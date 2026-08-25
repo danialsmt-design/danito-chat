@@ -65,3 +65,4 @@
 - [Harness date UTC offset](harness-date-utc-offset.md) — Claude's "today" is UTC; early-morning MYT reads a day behind the real PC clock — trust the machine, not the harness date.
 - [Line PC time sync](line-pc-time-sync.md) — all 5 line PCs now auto-sync via internet NTP; L2-L5 were not syncing (service stopped/free-running) before 2026-08-24.
 - [PVS DB fail-safe](pvs-db-failsafe.md) — fail-over second DB link (Tailscale) + hold-and-write + WhatsApp alert when neither DB route is reachable; all 5 lines, 2026-08-24.
+- [PVS reopen lots](pvs-reopen-lots.md) — per-line `reopenLots` config forces old incomplete carry-over lots into the dropdown past the 7-day window; first use = L1 two July L307 B-sides.
