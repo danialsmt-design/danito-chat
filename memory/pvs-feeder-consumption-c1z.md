@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 19fcfab6-cf20-4ed1-99bb-c8d8f04306be
-  modified: 2026-08-27T14:21:41.773Z
+  modified: 2026-08-27T15:34:47.565Z
 ---
 
 Feeder draw-down and attrition should come from each machine's OWN per-feeder pickup counts (the Sony **C1Z** "Summary by Supply Location" report), NOT from `boards × placements-per-board`. Confirmed by Danial 2026-08-27.
@@ -20,3 +20,5 @@ C1Z tags (verified by arithmetic on live L1 data): VC=attempted, TC=successful (
 **Why:** `boards×perBoard` assumes zero pickup waste and rides on PVS's board count, which drifts when serial R0s are missed. Live proof: L1 F114 WA2-2419-000 read PVS=0 while physically 80 remained — a baseline/drift error that the machine's own pickup count would not have. See [[pvs-partsout-expected-watchdog]], [[pvs-count-two-counters-and-cap]].
 
 **How to apply:** hybrid — keep the live per-board decrement for responsiveness, then SNAP each feeder's remaining to `start − VC-since-reel-load` on every C1Z capture (machine = truth, board count fills the gaps). Record each feeder's VC at reel-load as the baseline; a reel spanning a lot uses current VC. At parts-out, final attrition = VC−TC (true short-yield), replacing the drift-prone tracked-remainder that inflated `PartAttrition` (the 651-pc WA2-2419-000 case). Board count stays as the fallback when C1Z is unavailable (A4E00 refusal / between captures). C1Z is refused (A4E00) the same way C1M is — can be durable (M1 refused 3h on 2026-08-27), so the fallback matters.
+
+**STATUS 2026-08-27:** SHADOW mode (`c1zShadow` config flag) DEPLOYED to all 5 lines and enabled — logs per-feeder drift (PVS per-board vs machine pickups) to `C:\PvsLineApp\supply-report\shadow-M{n}-{date}.log`, writes NO stock. Also live: `/api/feederstats` + machine-inv.html per-feeder pickup/error columns + per-lot "save finished lot" file (`lot-{lot}-M{n}.txt`, fires on lot change before the operator's reset) + retry-on-A4E00 in the reconciler + TI transaction-ID gap detector. `c1zDecrement` flag exists but the APPLY logic is NOT wired yet — that's the next phase, only after shadow validates on real production. Shadow fills when machines answer C1Z, i.e. when producing a fresh lot again (Danial: "it will answer when it start produce again").
