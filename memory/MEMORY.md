@@ -59,6 +59,7 @@
 - [Bursa trading agent](bursa-trading-agent.md) — 0.469% round-trip cost floor killed every intraday backtest; buy-and-hold beat all variants; Bursa data-licensing traps.
 - [PVS unload + rule trees](pvs-unload-and-rule-trees.md) — "Unload all feeders" (clear feeders, keep UID remainder, never touch StockOut/lot/attrition, reversible) + the rule-tree/guardian workflow + verify.html declutter; all deployed to 5 lines.
 - [PVS feeder consumption = C1Z](pvs-feeder-consumption-c1z.md) — feeder draw-down + attrition from the machine's OWN per-feeder pickups (C1Z), not boards×perBoard: remaining=start−VC(attempted), used=TC(successful), attrition=VC−TC; SonySupplyReport parser + per-lot text-file capture built 2026-08-27.
+- [PVS component decrement bible](pvs-component-decrement-bible.md) — per-lot total usage (perBoard×lot count) is the governing truth; board-out signal drives decrement, operator HMI panel-sync upkeeps the count (C1M/C1Z A4E00 during production), lot-end verifies vs bible, exhaust parts-out learning calibrates per-part drift (shadow); never lose a reel's count; all 5 lines 2026-09-01.
 
 - [PC health: known issues](pc-health-known-issues.md) — Dell Inspiron 7490; Dell ServiceShell RAM leak + a run of 3 BSODs to keep watching.
 - [Thunderbird nstmp disk bloat](thunderbird-nstmp-disk-bloat.md) — failed-compaction temp files silently ate 195GB of C:; will recur, check here first when disk is full.
