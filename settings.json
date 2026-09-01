@@ -4,6 +4,9 @@
       "WebFetch"
     ]
   },
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": true
+  },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
       "source": {
@@ -12,7 +15,5 @@
       }
     }
   },
-  "enabledPlugins": {
-    "frontend-design@claude-plugins-official": true
-  }
+  "agentPushNotifEnabled": true
 }
