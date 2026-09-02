@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 19fcfab6-cf20-4ed1-99bb-c8d8f04306be
-  modified: 2026-08-24T14:17:07.682Z
+  modified: 2026-09-01T12:06:46.778Z
 ---
 
 Built + deployed to all 5 lines 2026-08-24 so a DB-path fault can neither stall nor lose a production count. Three layers:
@@ -15,5 +15,7 @@ Built + deployed to all 5 lines 2026-08-24 so a DB-path fault can neither stall 
 2. **Hold-and-write (already live):** if BOTH routes are down, boards stay in `dpc-state.json` and write when either returns, dated to the real day. See [[pvs-dpc-recording-flag]].
 
 3. **DB-down WhatsApp alert (`DbHealthService`):** the 45s heartbeat pings via `PingAsync`, which now tries BOTH routes — so a false ping = nothing can reach the DB. After ~3 consecutive misses (~1.5 min) it WhatsApps Danial once ("CANNOT reach the production DB on EITHER route… production is HELD…"), and once on recovery. Sender = `WhatsAppSender` → `POST http://100.90.248.92:8080/api/send {recipient,message}` (gms-wabridge Pi, on Tailscale = a different route than the intranet DB, so the alert gets out even when the DB path is down). Config `alerts.whatsAppBridgeUrl` / `alerts.whatsAppRecipient` (`60122185237`) / `alerts.dbDownAlert` — DEFAULTED in code (`AlertConfig`) so it works with no per-line config. All 5 lines can reach the bridge:8080 over Tailscale (verified). Bridge send verified HTTP 200.
+
+4. **Offline badge auth + parts-exchange (added 2026-09-01, all 5 lines):** a DB outage must never block a badge scan / parts-exchange. `SqlReelPartRepository` keeps a LOCAL badge cache (`badge-cache.json`, scanned-UID→person+role): every badge resolved while up is cached, and `DbHealthService` PRELOADS the whole roster on a ~15-min heartbeat (`PreloadBadgesAsync`; 23 badges/line verified). When BOTH routes are down `FindBadgeAsync` serves auth from the cache (a genuinely-unknown badge while UP still returns not-found — no false auth). The parts-change swap is all local state; DB qty lookups fall back to UID-embedded/manual qty; the count is kept in `remaining.json` and written back by UID via SyncStockOuts on recovery. Diagnostic: `GET /api/badges/status` → {cached, outcome}.
 
 **Complementary, NOT yet built:** netguard OS-level route-failover so the intranet **WiFi NIC** is used as a second path to `192.168.0.134` (the lines are dual-homed Ethernet+WiFi to that subnet). Also the NAS watchdog. Related: [[remote-access-from-home]], [[whatsapp-bridge-pi]], [[whatsapp-route-via-wabridge]], [[nas-reelpart-db-host]].
