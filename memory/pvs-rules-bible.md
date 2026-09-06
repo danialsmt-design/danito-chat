@@ -20,3 +20,5 @@ Danial (2026-08-12): **"This is your bible — follow it until a new one comes f
 - Distributed 2026-08-12 via WhatsApp to Raja Rao (60163327003), Kalsom (601123440268), Danish (60122445237).
 
 When a rule changes, update `docs/pvs-rules.md`, republish the Artifact (same path → same URL), and update the relevant rule memory.
+
+**PRIMARY JOB (Danial, 2026-09-06): "PVS main job is to make sure the correct component is loaded to the machine."** Reel-to-feeder verification (exact part match against the feeder list, block a wrong reel, model/program verify) is the core; the count/consumption tracking, lot progress, forecasts and alerts are secondary and must never get in the way of, or be traded against, that verification.
