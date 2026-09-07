@@ -25,3 +25,5 @@ runs `deploy-pvs.ps1` (backup + health-check + auto-rollback) and drops the line
 Line PC Tailscale IPs: L1 100.69.81.105, L2 100.94.102.44, L3 100.105.64.115, L4 100.82.187.65, L5 100.101.8.76
 (all `lineNpvs`, cred files `C:\Users\Lourdes Gunadasan\lineN.cred`). PVS serves `:5199`. See [[pvs-line2-deploy]],
 [[pvs-line5-deploy]], [[pvs-manual-feeder-load]].
+
+**Correction 2026-09-07:** `boardsPerHour` in `/api/status` does NOT decay after a stop (L4 still read 60 bph 45 min after its last board; L3 30 bph 15 min after). A watcher keyed on rate>0 never fires on a quietly stopped line. Use `/api/stop/state` instead: idle = `down == true` AND >=4 min since `lastBoardAt`, plus `verify.activeMode` in {None, ShiftChange}. The repo `deploy/deploy-when-idle.ps1` still has the old signal - fix pending; the working pattern is the scratchpad `deploy-when-idle-L2.ps1` (see [[reel-delivery-robot]]).
