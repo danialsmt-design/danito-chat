@@ -1,19 +1,22 @@
-{
-  "permissions": {
-    "allow": [
-      "WebFetch"
-    ]
-  },
-  "enabledPlugins": {
-    "frontend-design@claude-plugins-official": true
-  },
-  "extraKnownMarketplaces": {
-    "claude-plugins-official": {
-      "source": {
-        "source": "git",
-        "url": "https://github.com/anthropics/claude-plugins-official.git"
-      }
-    }
-  },
-  "agentPushNotifEnabled": true
+﻿{
+    "permissions":  {
+                        "allow":  [
+                                      "WebFetch",
+                                      "PowerShell(Set-Location \"C:\\Users\\Lourdes Gunadasan\\Documents\\Dantec\\PVS\\deploy\"; .\\deploy-pvs.ps1 *)",
+                                      "PowerShell(\u0026 \"C:\\Users\\Lourdes Gunadasan\\Documents\\Dantec\\PVS\\deploy\\deploy-pvs.ps1\" *)",
+                                      "PowerShell(.\\deploy-pvs.ps1 *)"
+                                  ]
+                    },
+    "enabledPlugins":  {
+                           "frontend-design@claude-plugins-official":  true
+                       },
+    "extraKnownMarketplaces":  {
+                                   "claude-plugins-official":  {
+                                                                   "source":  {
+                                                                                  "source":  "git",
+                                                                                  "url":  "https://github.com/anthropics/claude-plugins-official.git"
+                                                                              }
+                                                               }
+                               },
+    "agentPushNotifEnabled":  true
 }
