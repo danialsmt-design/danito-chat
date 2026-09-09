@@ -6,6 +6,7 @@
 - [NFC HID reader protocol](nfc-hid-reader-protocol.md) — VID_FFFF/PID_0035 demo NFC writer: full reversed protocol; buzzer/detect work, no UID; standalone scanner at Downloads/nfc-scanner.
 - [RFID app (PN532 tool)](rfid-app-pn532-tool.md) — dump/crack/write/clone web app for the PN532 (COM4); test card is gen2 magic; UHF reader integration pending.
 - [MCS / MCS Ai](mcs-material-control-system.md) — the new central material control system; why not "PCS", and where the "Ai" belongs.
+- [MCS line schedule](mcs-line-schedule.md) — derived from open POs; deadline = due − 2 days; fixed-line rule; PO line = lot; advisory only (PVS still supervisor-driven).
 - [PVS ⇄ MCS Ai coordination](pvs-mcs-coordination.md) — the two sessions share one DB; ownership map + single-writer rule + the shared ledger (Documents/Dantec/MCS/COORDINATION.md) that stops them contradicting.
 - [Sony SMT parts verification](sony-smt-parts-verification.md) — parts-exhaust interlock: 5 lines (6th planned) × 4 mounters, 1 PC/line over serial, scanner-based reel check.
 - [SMT line physical layout](smt-line-physical-layout.md) — the 13-station line (right-to-left), M1/M2=F130 + M3/M4=F209, and the Sony rule 1xx=cassette / 5xx-6xx=tray.
