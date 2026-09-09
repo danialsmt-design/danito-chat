@@ -19,6 +19,24 @@ Rules Danial fixed (2026-09-08):
   line cannot make the date AND the move actually makes it (else stays home, flagged late).
 - **One PO line = one production lot** (no splitting).
 - Advisory only: PVS lot change stays supervisor-badge only ([[pvs-lot-supervisor-only]]).
+- **Operator working time (Danial 2026-09-09):** Mon–Fri 07:30–19:30 and the lines STOP at shift end.
+  19:30–21:00 is overtime; **no plan on Saturday**. OT and Saturday exist only per DAY, added by the
+  planner (OT / work chips in the timeline header → `POST /api/schedule/day`; stored as OvertimeDays /
+  ExtraWorkDays / OffDays in SchedulePlan). On an OT day the deadline moves to 21:00.
+  Fixed breaks (lines stop): lunch 12:00–12:45, tea 15:30–15:45 (setting `Breaks`, cut out of every
+  working window, so a shift = 11 h of work); bars show the gaps.
+- **Manpower rule (Danial 2026-09-09):** 2 operators per running line; 1 line leader for every 3 running
+  LINES (5 lines = 10 ops + 2 leaders). Bars on the Gantt are drawn per working stretch (PlanItem.Segments):
+  stop at shift end / OT end, resume next working morning. Page lists it per day + per OT window; late lots get
+  a suggestion (OT on these days / work this Saturday, with the manpower) the planner can Apply or ignore.
+- Page also has a "Material shortage ahead" section (bottom) + a Parts-short tile: per scheduled
+  model, the completability short parts with "needed from" = that model's first planned start;
+  clicking a lot lists the short part numbers in its popup. Horizon can be 1–4 days (day stretches, hour marks).
+- **Shortage rule (Danial 2026-09-09): ignore Canon invoices.** Short = needed − ACTUAL balance, where
+  actual balance = store (StockIns.RemainingQty) + loaded feeders + reels at the line (= StockOuts
+  latest-row-per-UID qty). InLineInv is a full subset of StockOuts (100% UID overlap) — never add it
+  on top or it double counts. Parts Control checks ONE lot vs store, the page adds up every open lot of
+  the model — that is why they can disagree (L264 / VC8-8380-106: 3,960 needed vs 3,632 balance).
 
 Domain facts learned from the data:
 - Home lines are per SIDE and the two sides run on different lines in a pipeline:
@@ -28,8 +46,17 @@ Domain facts learned from the data:
 - Side order per model comes from history (L311 AND recently L264 run B first).
 - Running rate ≈ 150–280 boards/h while producing (5-min DPC buckets; bulk manual
   rows with Quantity>60 excluded); gross rate is far lower and erratic → plan uses
-  running rate × utilisation (setting, default 0.7). Production runs 7 days incl. Sunday;
+  running rate × utilisation. Utilisation is MEASURED PER LINE (Danial agreed 2026-09-09):
+  within-run output buckets ÷ slots between first and last output of the day, break slots
+  excluded, last 30 d, ≥5 runs (Sep-2026: L1 0.80, L2 0.70, L3 0.62, L4 0.54, L5 0.69, all 0.67);
+  mode "fixed" or a line with no history uses the global factor (0.7). Breaks are NOT double
+  counted: the running rate never contained them. Production runs 7 days incl. Sunday;
   night shift rare (setting, default off).
+- **Monitor quirk:** `daiya.po` / `lotSize` / `totalOutput` are TODAY'S lots on the line ADDED TOGETHER
+  ("HC…539000, HC…335000", 1200, 88) — not one lot. The current lot = LAST entry of `daiya.lots[]`
+  ({lotNo, model, target, boards}); the parser uses that. A comma-joined lot string is still split and
+  each open PO queued in order (safety net). Caught 2026-09-09 when L4 got a phantom 1,112-board lot
+  and one PO was planned twice.
 - "Running now" comes from the NAS line monitor `nas-daiya` :8899 `/api/all`
   (env `LINE_MONITOR_URL`); its line IP list was stale for L1/L3 on 2026-09-09, so the
   planner falls back to the DB's last production bucket (4 h window) for unreachable lines.
