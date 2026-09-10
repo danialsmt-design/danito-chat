@@ -18,11 +18,31 @@ Rules Danial fixed (2026-09-08):
   on ("home line", from DailyProductionCount, last 60 d); it moves only when the home
   line cannot make the date AND the move actually makes it (else stays home, flagged late).
 - **One PO line = one production lot** (no splitting).
+- **Which line runs which side is the PLANNER's call, not a hard rule** (Danial 2026-09-09, when I
+  tried to hard-code "Line 5 = A side"): default = history (home line per model-side; when moving,
+  prefer lines that have run that side at all). A per-line side restriction exists in settings
+  (`LineSides`) but is EMPTY by default — only the planner sets it.
+- **Model·side → line table** on the page (Danial 2026-09-09): one row per model-side, planner picks a
+  line or "history"; stored as `HomeLines` {"L307|B":"1"} in settings (`POST /api/schedule/home`); a
+  planner line beats the history home line (PlanItem.HomeSource = planner|history|none).
+- **Non-Canon jobs** (Danial 2026-09-09): planner types lot ref + model + side (A/B/A then B/B then A/
+  single) + qty + "SMT done by" date (+ optional line/note) on the page; stored under SchedulePlan key
+  "manual" (`POST /api/schedule/manual`, `/manual/delete`); planned like a PO with buffer 0 (the date IS
+  the SMT finish day); progress = DPC counts under that LotNo; rate = model history else default.
+- **L347 is a PRE-PRODUCTION lot/model** (Danial 2026-09-09): setting `PreproductionModels` (default
+  ["L347"]) keeps it out of the per-line utilisation measurement (it dragged Line 4 to 0.54) and out of
+  the "lines that run this side" history; its own lots still plan at their own measured pace, tagged
+  "pre-prod".
+- Drag in TIME as well as line: dropping a bar earlier on a line = priority 1 on that line (run it
+  first), later past everything = back to due-date order; another line = pin. Priority 0 clears.
 - Advisory only: PVS lot change stays supervisor-badge only ([[pvs-lot-supervisor-only]]).
 - **Operator working time (Danial 2026-09-09):** Mon–Fri 07:30–19:30 and the lines STOP at shift end.
-  19:30–21:00 is overtime; **no plan on Saturday**. OT and Saturday exist only per DAY, added by the
-  planner (OT / work chips in the timeline header → `POST /api/schedule/day`; stored as OvertimeDays /
-  ExtraWorkDays / OffDays in SchedulePlan). On an OT day the deadline moves to 21:00.
+  19:30–21:00 is overtime; **no plan on Saturday**. OT and Saturday exist only per DAY and can be
+  per LINE (Danial 2026-09-09): click the day in the timeline header → day panel with an "All lines"
+  row + one row per line → `POST /api/schedule/day {date, line?, ot|work|off|clear}`. Stored in
+  SchedulePlan as "yyyy-MM-dd" (all lines) or "yyyy-MM-dd@N" (line N) in OvertimeDays / ExtraWorkDays /
+  OffDays; `WorkCalendar(s, line)` resolves them. On an OT day that line's deadline moves to 21:00.
+  Suggestions for late lots target the lot's own line ("Apply on Line N").
   Fixed breaks (lines stop): lunch 12:00–12:45, tea 15:30–15:45 (setting `Breaks`, cut out of every
   working window, so a shift = 11 h of work); bars show the gaps.
 - **Manpower rule (Danial 2026-09-09):** 2 operators per running line; 1 line leader for every 3 running
