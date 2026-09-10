@@ -7,6 +7,7 @@
 - [RFID app (PN532 tool)](rfid-app-pn532-tool.md) — dump/crack/write/clone web app for the PN532 (COM4); test card is gen2 magic; UHF reader integration pending.
 - [MCS / MCS Ai](mcs-material-control-system.md) — the new central material control system; why not "PCS", and where the "Ai" belongs.
 - [nas-daiya line monitor](nas-daiya-line-monitor.md) — NAS :8899 polls line PCs by DHCP Ethernet LAN IP (PVS_LINES); L1/L3 drifted 2026-09-09; how to re-point + the scoped 5199 rule.
+- [MCS delivery page + reminders](mcs-delivery-page.md) — delivery.html LIVE 2026-09-10; daily WhatsApp to Muli (D.O./invoice) + packaging trio; NAS→Pi path fixed 2026-09-10 (TUN enabled on Synology Tailscale, by Danial over SSH); test send delivered.
 - [MCS line schedule](mcs-line-schedule.md) — LIVE 2026-09-09 (schedule.html + /api/schedule): derived from open POs; deadline = due − 2 days; home line per model-SIDE (moves only if the move makes the date); PO line = lot; advisory; inputs = DPC rates + nas-daiya live lots.
 - [PVS ⇄ MCS Ai coordination](pvs-mcs-coordination.md) — the two sessions share one DB; ownership map + single-writer rule + the shared ledger (Documents/Dantec/MCS/COORDINATION.md) that stops them contradicting.
 - [Sony SMT parts verification](sony-smt-parts-verification.md) — parts-exhaust interlock: 5 lines (6th planned) × 4 mounters, 1 PC/line over serial, scanner-based reel check.
