@@ -67,6 +67,7 @@
 - [PVS unload + rule trees](pvs-unload-and-rule-trees.md) — "Unload all feeders" (clear feeders, keep UID remainder, never touch StockOut/lot/attrition, reversible) + the rule-tree/guardian workflow + verify.html declutter; all deployed to 5 lines.
 - [PVS feeder consumption = C1Z](pvs-feeder-consumption-c1z.md) — feeder draw-down + attrition from the machine's OWN per-feeder pickups (C1Z), not boards×perBoard: remaining=start−VC(attempted), used=TC(successful), attrition=VC−TC; SonySupplyReport parser + per-lot text-file capture built 2026-08-27.
 - **HANDOVER**: current in-flight PVS state (deployment matrix, open threads, domain truths) lives in `Documents/Dantec/PVS/HANDOVER.md` (git branch `session-2026-09-03`) — read it first when resuming PVS work.
+- [PVS attrition report (2 % rule)](pvs-attrition-report.md) — PVS remaining at parts-out ÷ start qty; > 2 % → WhatsApp Raja Rao at lot end; C1Z = throw alarm only, never the count; all 5 lines 2026-09-14.
 - [PVS component decrement bible](pvs-component-decrement-bible.md) — per-lot total usage (perBoard×lot count) is the governing truth; board-out signal drives decrement, operator HMI panel-sync upkeeps the count (C1M/C1Z A4E00 during production), lot-end verifies vs bible, exhaust parts-out learning calibrates per-part drift (shadow); never lose a reel's count; all 5 lines 2026-09-01.
 
 - [PC health: known issues](pc-health-known-issues.md) — Dell Inspiron 7490; Dell ServiceShell RAM leak + a run of 3 BSODs to keep watching.
