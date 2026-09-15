@@ -15,6 +15,7 @@
 - [SMT line physical layout](smt-line-physical-layout.md) — the 13-station line (right-to-left), M1/M2=F130 + M3/M4=F209, and the Sony rule 1xx=cassette / 5xx-6xx=tray.
 - [Parts Control DB write access](parts-control-db-write-access.md) — dbsvc CAN write data remotely (no DDL, so back up to CSV not a table); ACER-PC (dbo) only for grants.
 - [Reading true stock](reading-true-stock.md) — StockIns.RemainingQty is zeroed on issue; store-only stock reads zero for parts on the feeders.
+- [Factory network upgrade](factory-network-upgrade.md) — U6 Pro + UCG-Ultra + WireGuard to retire Tailscale; TM public IP (no CGNAT), TP-Link router .1, line-PC MACs + reservation table + Phase-1 cutover in the vault note.
 - [Remote access from home](remote-access-from-home.md) — Tailscale double-hop: home → line1pvs (100.108.0.118) → LAN → Parts Control PC (192.168.0.134).
 - [NAS ReelPart DB host](nas-reelpart-db-host.md) — Synology DS225+ to host ReelPart-New (SQL Server in Docker); staged, blocked on the 6GB RAM upgrade until 2026-08-11.
 - [Parts DB server migration](parts-db-server-migration.md) — moving ReelPart-New off the shop-floor desktop to a real server; DB hardening (backups, audit cols, constraints, LineId) queued for then.
@@ -67,6 +68,7 @@
 - [PVS unload + rule trees](pvs-unload-and-rule-trees.md) — "Unload all feeders" (clear feeders, keep UID remainder, never touch StockOut/lot/attrition, reversible) + the rule-tree/guardian workflow + verify.html declutter; all deployed to 5 lines.
 - [PVS feeder consumption = C1Z](pvs-feeder-consumption-c1z.md) — feeder draw-down + attrition from the machine's OWN per-feeder pickups (C1Z), not boards×perBoard: remaining=start−VC(attempted), used=TC(successful), attrition=VC−TC; SonySupplyReport parser + per-lot text-file capture built 2026-08-27.
 - **HANDOVER**: current in-flight PVS state (deployment matrix, open threads, domain truths) lives in `Documents/Dantec/PVS/HANDOVER.md` (git branch `session-2026-09-03`) — read it first when resuming PVS work.
+- [PVS E03 needs both scans](pvs-e03-needs-both-scans.md) — day-one rule: a parts-out is a fact only after old reel + different new reel scanned (the change COMMIT); a raw E03 is a false call — never hook logic to it.
 - [PVS attrition report (2 % rule)](pvs-attrition-report.md) — PVS remaining at parts-out ÷ start qty; > 2 % → WhatsApp Raja Rao at lot end; C1Z = throw alarm only, never the count; all 5 lines 2026-09-14.
 - [PVS component decrement bible](pvs-component-decrement-bible.md) — per-lot total usage (perBoard×lot count) is the governing truth; board-out signal drives decrement, operator HMI panel-sync upkeeps the count (C1M/C1Z A4E00 during production), lot-end verifies vs bible, exhaust parts-out learning calibrates per-part drift (shadow); never lose a reel's count; all 5 lines 2026-09-01.
 

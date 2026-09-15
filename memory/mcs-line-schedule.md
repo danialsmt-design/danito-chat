@@ -33,6 +33,10 @@ Rules Danial fixed (2026-09-08):
   ["L347"]) keeps it out of the per-line utilisation measurement (it dragged Line 4 to 0.54) and out of
   the "lines that run this side" history; its own lots still plan at their own measured pace, tagged
   "pre-prod".
+- **Remove a lot from the plan (2026-09-15):** "Remove" button on every row of the lots table + "Remove
+  from plan" in the lot popup → override `Hold=true` for both sides (reason optional); the PO stays open
+  (PO page / delivery list unaffected); shown in the "Held · removed from the plan" card with "Put back"
+  (hold=false). Non-Canon jobs have their own Remove in the jobs card (Danial removed his three on 09-15).
 - Drag in TIME as well as line: dropping a bar earlier on a line = priority 1 on that line (run it
   first), later past everything = back to due-date order; another line = pin. Priority 0 clears.
 - Advisory only: PVS lot change stays supervisor-badge only ([[pvs-lot-supervisor-only]]).
