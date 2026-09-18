@@ -37,6 +37,9 @@ Rules Danial fixed (2026-09-08):
   from plan" in the lot popup → override `Hold=true` for both sides (reason optional); the PO stays open
   (PO page / delivery list unaffected); shown in the "Held · removed from the plan" card with "Put back"
   (hold=false). Non-Canon jobs have their own Remove in the jobs card (Danial removed his three on 09-15).
+- **Long-run flash (Danial 2026-09-18):** a lot-side whose planned run (start→finish, calendar days)
+  exceeds `LongRunDays` (setting on the page, default 5) makes its LINE lane flash red and marks the bar
+  ⏱; PlanItem.LongRun/RunDays, PlanLine.LongRunCount.
 - Drag in TIME as well as line: dropping a bar earlier on a line = priority 1 on that line (run it
   first), later past everything = back to due-date order; another line = pin. Priority 0 clears.
 - Advisory only: PVS lot change stays supervisor-badge only ([[pvs-lot-supervisor-only]]).
