@@ -22,3 +22,5 @@ Cutover of **ReelPart-New** from the Parts PC (`DESKTOP-TECHNIC` / `192.168.0.13
 - Then a coordinated full cutover in an idle window: fresh backup → restore over NAS staging copy → flip lines + PC3 app (+ ProductionAPI) together → validate → keep `.134` as fallback ~1 week.
 
 **Client/endpoint inventory (Danial 2026-08-12):** 5 line PCs (.105/.147/.126/.144/.157) + PC1 .112 + PC2 .121 + PC3 .134 (DB host) + Danial's PC. PC1/PC2 = browser clients of the web app (no direct repoint if only the web app's conn moves). All lines reach the NAS on both LAN (.169:1433) and Tailscale — verified; line2/line3 route over USB WiFi dongles (Danial: leave as-is).
+
+**Update 2026-09-22: PVS line apps ARE on the NAS.** All five boxes read live: `central.server` = `192.168.0.169,1433` (NAS LAN), `fallbackServer` = `100.125.22.119,1433` (NAS Tailscale); L3 runs on the fallback. Production rows written today were read back from the NAS. Remaining: confirm the hourly .134→NAS mirror is off, old instance read-only, PC3 app / MCS pages / Ashish's clear page repointed. Deploy templates in the PVS repo are stale (.113/.134). See `PVS/docs/pvs-db-writes-for-migration.md`.
